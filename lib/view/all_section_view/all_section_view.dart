@@ -1,8 +1,10 @@
 
 
 
+import 'package:doctor_demo/res/responsive/responsive.dart';
 import 'package:doctor_demo/view/about_section_view/about_section_view.dart';
 import 'package:doctor_demo/view/contact_section_view/contact_section_view.dart';
+import 'package:doctor_demo/view/fotter_Section_view/fotter_Section_view.dart';
 import 'package:doctor_demo/view/header_section_view/header_section_view.dart';
 import 'package:doctor_demo/view/home_section_view/home_section_view.dart';
 import 'package:doctor_demo/view/our_expert_team_section_view/our_expert_team_section_view.dart';
@@ -34,10 +36,14 @@ class AllSectionView extends StatelessWidget {
 
             /// our expert team section
             OurExpertTeamSectionView(),
-            SizedBox(height: 100,),
+            SizedBox(height: 80,),
 
             /// contact section view
             ContactSectionView(),
+            SizedBox(height: 100),
+
+            /// fotter section view
+            FotterSectionView()
         
           ],
         ),

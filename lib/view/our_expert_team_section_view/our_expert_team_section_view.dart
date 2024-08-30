@@ -37,6 +37,7 @@ class OurExpertTeamSectionView extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: 3, // Number of team members
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

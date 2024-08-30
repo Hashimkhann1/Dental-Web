@@ -15,7 +15,10 @@ class HeaderSectionView extends StatelessWidget {
       color: MyColors.primaryColor,
       height: Responsive.isMobile(context) ? 50 : 100,
       width:MediaQuery.of(context).size.width,
-      child: Responsive.isMobile(context) ? Align(alignment: Alignment.centerLeft, child: Icon(Icons.menu,size: 30,color: MyColors.whiteColor,)) : Row(
+      child: Responsive.isMobile(context) ? Align(alignment: Alignment.centerLeft, child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(Icons.menu,size: 34,color: MyColors.whiteColor,),
+      )) : Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
 

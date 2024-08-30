@@ -52,11 +52,12 @@ class OurServicesSection extends StatelessWidget {
                       crossAxisCount: Responsive.isMobile(context) ? 1 : 3,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
-                      childAspectRatio: 2/1.4
+                      childAspectRatio: Responsive.isMobile(context) ? 2 / 1.1 : 2/1.4
+
                     ),
                     itemBuilder: (context, index) {
                       return Container(
-                        padding: const EdgeInsets.all(30),
+                        padding: EdgeInsets.all( Responsive.isMobile(context) ? 16: 30),
                         margin: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 10 : 0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
@@ -66,12 +67,12 @@ class OurServicesSection extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             /// image
-                            const CircleAvatar(radius: 36,),
-                            SizedBox(height: height * 0.02,),
+                            CircleAvatar(radius:  Responsive.isMobile(context) ? 30 : 36,),
+                            SizedBox(height:  Responsive.isMobile(context) ? 10 : height * 0.02,),
 
                             /// service name
                             MyText(title: servicesData[index].toString(),fontSize: 28,fontWeight: FontWeight.bold,),
-                            SizedBox(height: height * 0.02,),
+                            SizedBox(height:  Responsive.isMobile(context) ? 10 : height * 0.02,),
                             MyText(title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",fontSize: 18,color: Colors.black.withOpacity(0.7),),
                           ],
                         ),

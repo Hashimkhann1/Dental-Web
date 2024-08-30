@@ -109,7 +109,17 @@ Widget _buildBookAppointmentForm(BuildContext context) {
           ),
         ),
         const SizedBox(height: 16),
-        Row(
+        Responsive.isMobile(context) ? Column(
+          children: [
+            _buildTextField("Name"),
+            const SizedBox(height: 16),
+            _buildTextField("Email"),
+            const SizedBox(height: 16),
+            _buildTextField("Number"),
+            const SizedBox(height: 16),
+            _buildTextField("Address"),
+          ],
+        ) : Row(
           children: [
             Expanded(
               child: _buildTextField("Name"),
@@ -121,7 +131,7 @@ Widget _buildBookAppointmentForm(BuildContext context) {
           ],
         ),
         const SizedBox(height: 16),
-        Row(
+        Responsive.isMobile(context) ? SizedBox() : Row(
           children: [
             Expanded(
               child: _buildTextField("Number"),
@@ -132,7 +142,7 @@ Widget _buildBookAppointmentForm(BuildContext context) {
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: Responsive.isMobile(context) ? 8 : 16),
         _buildTextField("Message", maxLines: 4),
         const SizedBox(height: 24),
         MyTextButton(title: "Submit",fontSize: 18,fontWeight: FontWeight.bold,backgroundColor: MyColors.primaryColor,textColor: CupertinoColors.white,width: 124,height: 38,borderRadius: 8,)

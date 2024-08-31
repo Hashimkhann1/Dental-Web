@@ -49,16 +49,16 @@ class OurServicesSection extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: Responsive.isMobile(context) ? 1 : 3,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: Responsive.isMobile(context) ? 2 / 1.1 : 2/1.4
+                      crossAxisCount: Responsive.isMobile(context) ? 1 : Responsive.isTablet(context) ? 2 :  3,
+                      crossAxisSpacing: Responsive.isTablet(context) ? 0 : 10,
+                      mainAxisSpacing: Responsive.isTablet(context) ? 16 : 10,
+                      childAspectRatio: Responsive.isMobile(context) ? 2 / 1.1 : Responsive.isTablet(context) ? 2 / 1 : 2/1.4
 
                     ),
                     itemBuilder: (context, index) {
                       return Container(
-                        padding: EdgeInsets.all( Responsive.isMobile(context) ? 16: 30),
-                        margin: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 10 : 0),
+                        padding: EdgeInsets.all( Responsive.isMobile(context) ? 16: Responsive.isTablet(context) ? 14 : 30),
+                        margin: Responsive.isTablet(context) ? EdgeInsets.only(left: 10 , right: 10) : EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 10 : 0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           color: MyColors.whiteColor,
@@ -67,12 +67,12 @@ class OurServicesSection extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             /// image
-                            CircleAvatar(radius:  Responsive.isMobile(context) ? 30 : 36,),
-                            SizedBox(height:  Responsive.isMobile(context) ? 10 : height * 0.02,),
+                            CircleAvatar(radius:  Responsive.isMobile(context) ? 30 : Responsive.isTablet(context) ? 40 : 36,),
+                            SizedBox(height:  Responsive.isMobile(context) ? 10 : Responsive.isTablet(context) ? height * 0.01 : height * 0.02,),
 
                             /// service name
                             MyText(title: servicesData[index].toString(),fontSize: 28,fontWeight: FontWeight.bold,),
-                            SizedBox(height:  Responsive.isMobile(context) ? 10 : height * 0.02,),
+                            SizedBox(height:  Responsive.isMobile(context) ? 10 : Responsive.isTablet(context) ? height * 0.01 : height * 0.02,),
                             MyText(title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",fontSize: 18,color: Colors.black.withOpacity(0.7),),
                           ],
                         ),

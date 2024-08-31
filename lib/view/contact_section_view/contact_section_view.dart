@@ -16,7 +16,7 @@ class ContactSectionView extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
 
     return Container(
-      width: Responsive.isMobile(context) ? width * 0.95 : width * 0.68,
+      width: Responsive.isMobile(context) ? width * 0.95 : Responsive.isTablet(context) ? width * 0.94 : width * 0.68,
       padding: const EdgeInsets.all(16.0),
       child: Responsive.isMobile(context) ? Column(
         children: [

@@ -68,7 +68,7 @@ class _HomeSectionViewState extends State<HomeSectionView> with TickerProviderSt
 
     return Container(
       width: width,
-      height: Responsive.isMobile(context) ? height * 0.88 : height * 0.75,
+      height: Responsive.isMobile(context) ? null : height * 0.75,
       color: MyColors.primaryColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -123,7 +123,7 @@ class _HomeSectionViewState extends State<HomeSectionView> with TickerProviderSt
                 ),
                 const SizedBox(height: 20),
                 MyTextButton(
-                  title: "About Us",
+                  title: "Book Appointment",
                   fontSize: 18,
                   backgroundColor: MyColors.whiteColor,
                   textColor: MyColors.primaryColor,
@@ -146,8 +146,8 @@ class _HomeSectionViewState extends State<HomeSectionView> with TickerProviderSt
           position: _imageSlideAnimation,
           child: Image.network(
             'https://i.imgur.com/NIwGSeL_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-            width: Responsive.isMobile(context) ? width * 0.86 : 560,
-            height: Responsive.isMobile(context) ? height * 0.48 : 510,
+            width: Responsive.isMobile(context) ? width * 0.86 : Responsive.isTablet(context) ? width * 0.42 : 560,
+            height: Responsive.isMobile(context) ? height * 0.48 : Responsive.isTablet(context) ? height * 0.28 : 510,
             fit: BoxFit.fitWidth,
           ),
         ),

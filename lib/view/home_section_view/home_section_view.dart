@@ -146,8 +146,8 @@ class _HomeSectionViewState extends State<HomeSectionView> with TickerProviderSt
           position: _imageSlideAnimation,
           child: Image.network(
             'https://i.imgur.com/NIwGSeL_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-            width: Responsive.isMobile(context) ? width * 0.86 : Responsive.isTablet(context) ? width * 0.42 : 560,
-            height: Responsive.isMobile(context) ? height * 0.48 : Responsive.isTablet(context) ? height * 0.28 : 510,
+            width: Responsive.isMobile(context) ? width * 0.86 : Responsive.isTablet(context) ? width * 0.44 : 560,
+            height: Responsive.isMobile(context) ? height * 0.48 : Responsive.isTablet(context) ? height * 0.3 : 510,
             fit: BoxFit.fitWidth,
           ),
         ),

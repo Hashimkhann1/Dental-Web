@@ -45,7 +45,7 @@ class _MyServicesCardState extends State<MyServicesCard>
 
   @override
   Widget build(BuildContext context) {
-    final indexOffset = Responsive.isMobile(context) ? widget.index * 190  : widget.index * 120; // Adjust this value based on your needs
+    final indexOffset = Responsive.isMobile(context) ? widget.index * 170  : widget.index * 120; // Adjust this value based on your needs
     final mobileTriggerOffset = 1782 + indexOffset;
     final desktopTriggerOffset = 1530 + indexOffset;
 

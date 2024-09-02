@@ -2,16 +2,13 @@ import 'package:doctor_demo/res/components/expert_doctor_card/expert_doctor_card
 import 'package:doctor_demo/res/components/my_text.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
 import 'package:doctor_demo/res/responsive/responsive.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OurExpertTeamSectionView extends StatelessWidget {
-  const OurExpertTeamSectionView({Key? key}) : super(key: key);
+  const OurExpertTeamSectionView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
 
     return Container(
       width: 1200,
@@ -38,7 +35,7 @@ class OurExpertTeamSectionView extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: 3, // Number of team members
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -54,83 +51,6 @@ class OurExpertTeamSectionView extends StatelessWidget {
                   imagePath: teamMembers[index]['imagePath']!);
             },
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTeamMemberCard({
-    required String name,
-    required String title,
-    required String imagePath,
-    required BuildContext context,
-  }) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(
-        children: [
-          // Background image
-          SizedBox(
-            height: height * 0.8,
-            width: width,
-            child: Image.network(
-              imagePath,
-              fit: BoxFit.cover,
-              filterQuality: FilterQuality.medium,
-            ),
-          ),
-
-
-          Positioned(
-            left: 0,
-            child: SizedBox(
-              width: width * 0.1,
-              height: height,
-              child: Container(
-                color: Colors.black45,
-              ),
-            ),
-          ),
-
-
-          Positioned(
-            right: -5.2,
-            child: SizedBox(
-              width: width * 0.1,
-              height: height,
-              child: Container(
-                color: Colors.black45,
-              ),
-            ),
-          ),
-
-          Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  /// name
-                  Container(
-                    // height: 40,
-                    child: MyText(title: "Doctor Name",fontSize: 24,fontWeight: FontWeight.bold,color: MyColors.whiteColor,),
-                  ),
-
-                  /// small description
-                  Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.symmetric(horizontal: 12),
-                    // height: 70,
-                    child: MyText(title: "Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content typeface without relying on meaningful content.",fontSize: 16,color: MyColors.whiteColor,textAlign: TextAlign.center,),
-                  ),
-                ],
-              )
-          )
         ],
       ),
     );

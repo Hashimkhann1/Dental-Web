@@ -65,7 +65,16 @@ class _OurServicesSectionState extends State<OurServicesSection>
           } else {
             return false;
           }
-        } else {
+        }else if(Responsive.isTablet(context)) {
+          if ((current.scrollOffsetValue >= 2006 &&
+              current.scrollOffsetValue <= 2100) ||
+              _controller.isAnimating) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        else {
           if ((current.scrollOffsetValue >= 1510 &&
                   current.scrollOffsetValue <= 1600) ||
               _controller.isAnimating) {

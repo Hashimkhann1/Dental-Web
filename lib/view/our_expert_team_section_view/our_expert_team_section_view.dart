@@ -1,3 +1,4 @@
+import 'package:doctor_demo/res/components/expert_doctor_card/expert_doctor_card.dart';
 import 'package:doctor_demo/res/components/my_text.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
 import 'package:doctor_demo/res/responsive/responsive.dart';
@@ -47,11 +48,10 @@ class OurExpertTeamSectionView extends StatelessWidget {
               childAspectRatio: 2 / 2, // Aspect ratio of the card
             ),
             itemBuilder: (context, index) {
-              return _buildTeamMemberCard(
+              return ExpertDoctorCard(
                   name: teamMembers[index]['name']!,
                   title: teamMembers[index]['title']!,
-                  imagePath: teamMembers[index]['imagePath']!,
-                  context: context);
+                  imagePath: teamMembers[index]['imagePath']!);
             },
           ),
         ],
@@ -59,53 +59,84 @@ class OurExpertTeamSectionView extends StatelessWidget {
     );
   }
 
-  Widget _buildTeamMemberCard(
-      {required String name,
-      required String title,
-      required String imagePath,
-      required BuildContext context}) {
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Image.network(
-            imagePath,
-            height: MediaQuery.of(context).size.height * 0.8,
-            fit: BoxFit.cover,
-          ),
-        ),
-        Positioned(
-          bottom: 60,
-          left: 100,
-          // right: 0,
-          child: Container(
-            alignment: Alignment.center,
-            width: 200,
-            height: 55,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(20)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                MyText(
-                  title: name,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-                MyText(
-                  title: title,
-                  fontSize: 15,
-                  color: MyColors.blackColor.withOpacity(0.7),
-                ),
-              ],
+  Widget _buildTeamMemberCard({
+    required String name,
+    required String title,
+    required String imagePath,
+    required BuildContext context,
+  }) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        children: [
+          // Background image
+          SizedBox(
+            height: height * 0.8,
+            width: width,
+            child: Image.network(
+              imagePath,
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.medium,
             ),
           ),
-        )
-      ],
+
+
+          Positioned(
+            left: 0,
+            child: SizedBox(
+              width: width * 0.1,
+              height: height,
+              child: Container(
+                color: Colors.black45,
+              ),
+            ),
+          ),
+
+
+          Positioned(
+            right: -5.2,
+            child: SizedBox(
+              width: width * 0.1,
+              height: height,
+              child: Container(
+                color: Colors.black45,
+              ),
+            ),
+          ),
+
+          Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  /// name
+                  Container(
+                    // height: 40,
+                    child: MyText(title: "Doctor Name",fontSize: 24,fontWeight: FontWeight.bold,color: MyColors.whiteColor,),
+                  ),
+
+                  /// small description
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.symmetric(horizontal: 12),
+                    // height: 70,
+                    child: MyText(title: "Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content typeface without relying on meaningful content.",fontSize: 16,color: MyColors.whiteColor,textAlign: TextAlign.center,),
+                  ),
+                ],
+              )
+          )
+        ],
+      ),
     );
   }
 }
+
 
 final List<Map<String, String>> teamMembers = [
   {
@@ -127,3 +158,48 @@ final List<Map<String, String>> teamMembers = [
         'https://images.theconversation.com/files/304957/original/file-20191203-66986-im7o5.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=926&fit=clip'
   },
 ];
+
+//
+// Stack(
+// children: [
+// ClipRRect(
+// borderRadius: BorderRadius.circular(20),
+// child: Image.network(
+// imagePath,
+// height: MediaQuery.of(context).size.height * 0.8,
+// fit: BoxFit.cover,
+// ),
+// ),
+// Positioned.fill(
+// // bottom: 60,
+// // left: 100,
+// // right: 0,
+// child: Align(
+// alignment: Alignment.center,
+// child: Container(
+// alignment: Alignment.center,
+// width: 200,
+// height: 55,
+// decoration: BoxDecoration(
+// color: Colors.white, borderRadius: BorderRadius.circular(20)),
+// child: Column(
+// crossAxisAlignment: CrossAxisAlignment.center,
+// mainAxisAlignment: MainAxisAlignment.center,
+// children: [
+// MyText(
+// title: name,
+// fontWeight: FontWeight.bold,
+// fontSize: 20,
+// ),
+// MyText(
+// title: title,
+// fontSize: 15,
+// color: MyColors.blackColor.withOpacity(0.7),
+// ),
+// ],
+// ),
+// ),
+// ),
+// )
+// ],
+// );

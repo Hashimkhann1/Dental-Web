@@ -45,9 +45,10 @@ class _MyServicesCardState extends State<MyServicesCard>
 
   @override
   Widget build(BuildContext context) {
-    final indexOffset = Responsive.isMobile(context) ? widget.index * 170  : widget.index * 120; // Adjust this value based on your needs
+    final indexOffset = Responsive.isMobile(context) ? widget.index * 160  : Responsive.isTablet(context) ? widget.index * 100  : widget.index * 110; // Adjust this value based on your needs
     final mobileTriggerOffset = 1782 + indexOffset;
     final desktopTriggerOffset = 1530 + indexOffset;
+    final tabletTriggerOffset = 2082 + indexOffset;
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -67,6 +68,11 @@ class _MyServicesCardState extends State<MyServicesCard>
                 current.scrollOffsetValue <= mobileTriggerOffset + 100) {
               shouldBuild = true;
             }
+          }else if(Responsive.isTablet(context)) {
+            if (current.scrollOffsetValue >= tabletTriggerOffset &&
+                current.scrollOffsetValue <= tabletTriggerOffset + 100) {
+              shouldBuild = true;
+            }
           } else {
             // Check if the scroll position is within the trigger range for desktop
             if (current.scrollOffsetValue >= desktopTriggerOffset &&
@@ -83,7 +89,12 @@ class _MyServicesCardState extends State<MyServicesCard>
           if (state.scrollOffsetValue >= mobileTriggerOffset) {
             _controller.forward();
           }
-        } else {
+        }else if(Responsive.isTablet(context)) {
+          if (state.scrollOffsetValue >= tabletTriggerOffset) {
+            _controller.forward();
+          }
+        }
+        else {
           if (state.scrollOffsetValue >= desktopTriggerOffset) {
             _controller.forward();
           }

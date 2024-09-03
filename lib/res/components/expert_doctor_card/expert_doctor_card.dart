@@ -2,6 +2,7 @@
 
 import 'package:doctor_demo/res/components/my_text.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
+import 'package:doctor_demo/res/responsive/responsive.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -95,7 +96,7 @@ class _ExpertDoctorCardState extends State<ExpertDoctorCard> with SingleTickerPr
                     borderRadius: BorderRadius.circular(20),
                   color: MyColors.whiteColor,
                   ),
-                  child: const MyText(title: "Tap to see the doctor’s details",fontSize: 20,fontWeight: FontWeight.bold,),
+                  child: MyText(title: "Tap to see the doctor’s details",fontSize: Responsive.isMobile(context) ? 16 : 20,fontWeight: FontWeight.bold,),
                 ),
               ),
             ),

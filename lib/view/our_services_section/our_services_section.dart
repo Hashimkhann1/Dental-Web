@@ -1,5 +1,4 @@
 import 'package:doctor_demo/res/components/my_sevices_card/my_sevices_card.dart';
-import 'package:doctor_demo/res/components/my_sevices_card/my_sevices_card.dart';
 import 'package:doctor_demo/res/components/my_text.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
 import 'package:doctor_demo/res/responsive/responsive.dart';
@@ -58,8 +57,8 @@ class _OurServicesSectionState extends State<OurServicesSection>
     return BlocBuilder<DisplayOffset, ScrollOffset>(
       buildWhen: (previous, current) {
         if (Responsive.isMobile(context)) {
-          if ((current.scrollOffsetValue >= 1770 &&
-                  current.scrollOffsetValue <= 1800) ||
+          if ((current.scrollOffsetValue >= 1900 &&
+                  current.scrollOffsetValue <= 2000) ||
               _controller.isAnimating) {
             return true;
           } else {
@@ -86,7 +85,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
       },
       builder: (context, state) {
         if (Responsive.isMobile(context)) {
-          if (state.scrollOffsetValue > 1782) {
+          if (state.scrollOffsetValue > 1952) {
             _controller.forward();
           }
         } else {
@@ -127,7 +126,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                         ),
                       ),
                     ),
-                    SizedBox(height: height * 0.04),
+                    SizedBox(height: Responsive.isMobile(context) ? height * 0.01 : height * 0.04),
                     // Using Flexible instead of Expanded
                     Flexible(
                       fit: FlexFit

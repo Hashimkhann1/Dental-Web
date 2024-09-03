@@ -13,10 +13,9 @@ class ContactSectionView extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
 
     return Container(
-      width: Responsive.isMobile(context) ? width * 0.95 : Responsive.isTablet(context) ? width * 0.94 : width * 0.68,
+      width: Responsive.isMobile(context) ? width * 0.97 : Responsive.isTablet(context) ? width * 0.94 : width * 0.68,
       padding: const EdgeInsets.all(16.0),
       child: Responsive.isMobile(context) ? Column(
         children: [
@@ -58,11 +57,11 @@ Widget _buildContactUsSection(BuildContext context) {
         ),
       ),
       const SizedBox(height: 32),
-      _buildContactDetail(Icons.phone, "Call Us At", "(+91) 8888888888"),
+      _buildContactDetail(Icons.phone, "Call Us At", "(+00) 000000000"),
       const SizedBox(height: 16),
-      _buildContactDetail(Icons.email, "Email Us On", "info@example.com"),
+      _buildContactDetail(Icons.email, "Email Us On", "clinicName@gmail.com.com"),
       const SizedBox(height: 16),
-      _buildContactDetail(Icons.location_on, "Address", "111 Adelaide, Australia"),
+      _buildContactDetail(Icons.location_on, "Address", "111 city street etc"),
     ],
   );
 }
@@ -93,7 +92,7 @@ Widget _buildContactDetail(IconData icon, String title, String detail) {
 Widget _buildBookAppointmentForm(BuildContext context) {
 
   return Container(
-    padding: const EdgeInsets.all(16),
+    padding: EdgeInsets.all(Responsive.isMobile(context) ? 8 : 16),
     decoration: BoxDecoration(
       color: Colors.grey.withOpacity(0.1),
       borderRadius: BorderRadius.circular(12),
@@ -131,7 +130,7 @@ Widget _buildBookAppointmentForm(BuildContext context) {
           ],
         ),
         const SizedBox(height: 16),
-        Responsive.isMobile(context) ? SizedBox() : Row(
+        Responsive.isMobile(context) ? const SizedBox() : Row(
           children: [
             Expanded(
               child: _buildTextField("Number"),
@@ -145,7 +144,7 @@ Widget _buildBookAppointmentForm(BuildContext context) {
         SizedBox(height: Responsive.isMobile(context) ? 8 : 16),
         _buildTextField("Message", maxLines: 4),
         const SizedBox(height: 24),
-        MyTextButton(title: "Submit",fontSize: 18,fontWeight: FontWeight.bold,backgroundColor: MyColors.primaryColor,textColor: CupertinoColors.white,width: 124,height: 38,borderRadius: 8,)
+        const MyTextButton(title: "Submit",fontSize: 18,fontWeight: FontWeight.bold,backgroundColor: MyColors.primaryColor,textColor: CupertinoColors.white,width: 124,height: 38,borderRadius: 8,)
       ],
     ),
   );
@@ -158,7 +157,9 @@ Widget _buildTextField(String label, {int maxLines = 1}) {
       labelText: label,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide.none
       ),
+
       filled: true,
       fillColor: Colors.white,
     ),

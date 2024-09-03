@@ -2,7 +2,6 @@
 
 import 'package:doctor_demo/res/components/my_text.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
-import 'package:doctor_demo/res/responsive/responsive.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -77,7 +76,7 @@ class _ExpertDoctorCardState extends State<ExpertDoctorCard> with SingleTickerPr
           children: [
             // Background image
             SizedBox(
-              height: height * 0.8,
+              height: height,
               width: width,
               child: Image.network(
                 widget.imagePath,
@@ -96,7 +95,7 @@ class _ExpertDoctorCardState extends State<ExpertDoctorCard> with SingleTickerPr
                     borderRadius: BorderRadius.circular(20),
                   color: MyColors.whiteColor,
                   ),
-                  child: const MyText(title: "Tap to see Doctor About",fontSize: 20,fontWeight: FontWeight.bold,),
+                  child: const MyText(title: "Tap to see the doctor’s details",fontSize: 20,fontWeight: FontWeight.bold,),
                 ),
               ),
             ),
@@ -105,7 +104,8 @@ class _ExpertDoctorCardState extends State<ExpertDoctorCard> with SingleTickerPr
             Positioned(
               left: 0,
               child: SizedBox(
-                width: Responsive.isTablet(context) ? width * 0.16 : Responsive.isMobile(context) ? width * 0.43 : width * 0.1,
+                width: width,
+                // width: Responsive.isTablet(context) ? width * 0.16 : Responsive.isMobile(context) ? width * 0.43 : width * 0.1,
                 height: height,
                 child: AnimatedBuilder(
                     animation: _controller,
@@ -123,25 +123,25 @@ class _ExpertDoctorCardState extends State<ExpertDoctorCard> with SingleTickerPr
             ),
 
 
-            Positioned(
-              right: Responsive.isTablet(context) ? -7.1 : -5.2,
-              child: SizedBox(
-                width: Responsive.isTablet(context) ? width * 0.16 : Responsive.isMobile(context) ? width * 0.5 : width * 0.1,
-                height: height,
-                child: AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context , child) {
-                    return Transform.rotate(
-                      angle: _rotateAnimation.value,
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        color: _colorAnimtaion.value,
-                      ),
-                    );
-                  }
-                ),
-              ),
-            ),
+            // Positioned(
+            //   right: Responsive.isTablet(context) ? -7.1 : -5.2,
+            //   child: SizedBox(
+            //     width: Responsive.isTablet(context) ? width * 0.16 : Responsive.isMobile(context) ? width * 0.5 : width * 0.1,
+            //     height: height,
+            //     child: AnimatedBuilder(
+            //       animation: _controller,
+            //       builder: (context , child) {
+            //         return Transform.rotate(
+            //           angle: _rotateAnimation.value,
+            //           alignment: Alignment.topRight,
+            //           child: Container(
+            //             color: _colorAnimtaion.value,
+            //           ),
+            //         );
+            //       }
+            //     ),
+            //   ),
+            // ),
 
             Center(
                 child: Column(

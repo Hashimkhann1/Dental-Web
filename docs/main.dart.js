@@ -43201,7 +43201,7 @@ M(a){var s,r,q,p,o,n,m=this,l=t.w
 if(A.a7(a,null,l).w.a.a<750)s=m.a.f*160
 else{r=A.cL(a)
 q=m.a
-s=r?q.f*100:q.f*110}p=1782+s
+s=r?q.f*100:q.f*100}p=1782+s
 o=1530+s
 n=2082+s
 A.a7(a,null,l).toString

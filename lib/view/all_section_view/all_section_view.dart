@@ -110,7 +110,7 @@ class _AllSectionViewState extends State<AllSectionView> {
             const SizedBox(height: 100),
 
             /// fotter section view
-            const FotterSectionView()
+            const FooterSectionView()
           ],
         ),
       ),

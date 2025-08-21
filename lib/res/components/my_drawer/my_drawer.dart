@@ -102,6 +102,7 @@ class _MyDrawerState extends State<MyDrawer>
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    final isMobile = width < 600;
 
     return Drawer(
       child: AnimatedBuilder(
@@ -120,19 +121,33 @@ class _MyDrawerState extends State<MyDrawer>
               ),
             ),
             child: SafeArea(
-              child: Column(
-                children: [
-                  // Header Section
-                  _buildHeader(height),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          children: [
+                            // Header Section - Responsive
+                            _buildHeader(height, isMobile),
 
-                  // Menu Section
-                  Expanded(
-                    child: _buildMenuSection(width, height),
-                  ),
+                            // Menu Section - Flexible
+                            _buildMenuSection(width, height, isMobile),
 
-                  // Contact Section
-                  _buildContactSection(height),
-                ],
+                            // Spacer to push contact to bottom
+                            const Spacer(),
+
+                            // Contact Section - Compact on mobile
+                            _buildContactSection(height, isMobile),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           );
@@ -141,22 +156,22 @@ class _MyDrawerState extends State<MyDrawer>
     );
   }
 
-  Widget _buildHeader(double height) {
+  Widget _buildHeader(double height, bool isMobile) {
     return SlideTransition(
       position: _logoSlideAnimation,
       child: FadeTransition(
         opacity: _logoFadeAnimation,
         child: Container(
           padding: EdgeInsets.symmetric(
-            vertical: height * 0.04,
+            vertical: isMobile ? height * 0.02 : height * 0.04,
             horizontal: 20,
           ),
           child: Column(
             children: [
-              // Logo/Icon
+              // Logo/Icon - Smaller on mobile
               Container(
-                width: 80,
-                height: 80,
+                width: isMobile ? 60 : 80,
+                height: isMobile ? 60 : 80,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -166,7 +181,7 @@ class _MyDrawerState extends State<MyDrawer>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(isMobile ? 15 : 20),
                   boxShadow: [
                     BoxShadow(
                       color: MyColors.primaryColor.withOpacity(0.3),
@@ -175,19 +190,19 @@ class _MyDrawerState extends State<MyDrawer>
                     ),
                   ],
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.local_hospital,
                   color: Colors.white,
-                  size: 40,
+                  size: isMobile ? 30 : 40,
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: isMobile ? 12 : 16),
 
-              // Clinic Name
-              const MyText(
+              // Clinic Name - Responsive font size
+              MyText(
                 title: "HealthCare Plus",
-                fontSize: 28,
+                fontSize: isMobile ? 22 : 28,
                 color: MyColors.primaryColor,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Oswald',
@@ -195,11 +210,14 @@ class _MyDrawerState extends State<MyDrawer>
                 textAlign: TextAlign.center,
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: isMobile ? 6 : 8),
 
-              // Tagline
+              // Tagline - Smaller on mobile
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                padding: EdgeInsets.symmetric(
+                  horizontal: isMobile ? 12 : 16,
+                  vertical: isMobile ? 4 : 6,
+                ),
                 decoration: BoxDecoration(
                   color: MyColors.primaryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -210,7 +228,7 @@ class _MyDrawerState extends State<MyDrawer>
                 child: Text(
                   "Your Health, Our Priority",
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: isMobile ? 10 : 12,
                     color: MyColors.primaryColor.withOpacity(0.8),
                     fontWeight: FontWeight.w500,
                   ),
@@ -223,7 +241,7 @@ class _MyDrawerState extends State<MyDrawer>
     );
   }
 
-  Widget _buildMenuSection(double width, double height) {
+  Widget _buildMenuSection(double width, double height, bool isMobile) {
     final menuItems = [
       {'title': 'Home', 'icon': Icons.home_rounded, 'onTap': widget.homeOnTap},
       {'title': 'About', 'icon': Icons.info_outline_rounded, 'onTap': widget.aboutOnTap},
@@ -244,7 +262,7 @@ class _MyDrawerState extends State<MyDrawer>
               child: Text(
                 "Menu",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: isMobile ? 14 : 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.grey.shade600,
                   letterSpacing: 0.5,
@@ -270,6 +288,7 @@ class _MyDrawerState extends State<MyDrawer>
                         icon: item['icon'] as IconData,
                         onTap: item['onTap'] as void Function()?,
                         index: index,
+                        isMobile: isMobile,
                       ),
                     ),
                   );
@@ -304,6 +323,7 @@ class _MyDrawerState extends State<MyDrawer>
     required IconData icon,
     required void Function()? onTap,
     required int index,
+    required bool isMobile,
   }) {
     final isHovered = _hoveredIndex == index;
 
@@ -312,7 +332,7 @@ class _MyDrawerState extends State<MyDrawer>
       onExit: (_) => setState(() => _hoveredIndex = -1),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        margin: const EdgeInsets.only(bottom: 8),
+        margin: EdgeInsets.only(bottom: isMobile ? 6 : 8),
         decoration: BoxDecoration(
           color: isHovered
               ? MyColors.primaryColor.withOpacity(0.1)
@@ -331,12 +351,15 @@ class _MyDrawerState extends State<MyDrawer>
             borderRadius: BorderRadius.circular(12),
             onTap: onTap,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 12 : 16,
+                vertical: isMobile ? 10 : 14,
+              ),
               child: Row(
                 children: [
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(isMobile ? 6 : 8),
                     decoration: BoxDecoration(
                       color: isHovered
                           ? MyColors.primaryColor.withOpacity(0.15)
@@ -345,7 +368,7 @@ class _MyDrawerState extends State<MyDrawer>
                     ),
                     child: Icon(
                       icon,
-                      size: 20,
+                      size: isMobile ? 18 : 20,
                       color: isHovered
                           ? MyColors.primaryColor
                           : Colors.grey.shade600,
@@ -355,7 +378,7 @@ class _MyDrawerState extends State<MyDrawer>
                   Expanded(
                     child: MyText(
                       title: title,
-                      fontSize: 16,
+                      fontSize: isMobile ? 14 : 16,
                       fontWeight: FontWeight.w600,
                       color: isHovered
                           ? MyColors.primaryColor
@@ -367,7 +390,7 @@ class _MyDrawerState extends State<MyDrawer>
                     turns: isHovered ? 0.0 : 0.0,
                     child: Icon(
                       Icons.arrow_forward_ios_rounded,
-                      size: 14,
+                      size: isMobile ? 12 : 14,
                       color: isHovered
                           ? MyColors.primaryColor
                           : Colors.grey.shade400,
@@ -382,12 +405,12 @@ class _MyDrawerState extends State<MyDrawer>
     );
   }
 
-  Widget _buildContactSection(double height) {
+  Widget _buildContactSection(double height, bool isMobile) {
     return FadeTransition(
       opacity: _contactFadeAnimation,
       child: Container(
-        padding: const EdgeInsets.all(20),
-        margin: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(isMobile ? 16 : 20),
+        margin: EdgeInsets.all(isMobile ? 12 : 16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -409,7 +432,7 @@ class _MyDrawerState extends State<MyDrawer>
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.all(isMobile ? 6 : 8),
                   decoration: BoxDecoration(
                     color: MyColors.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -417,14 +440,14 @@ class _MyDrawerState extends State<MyDrawer>
                   child: Icon(
                     Icons.contact_support_rounded,
                     color: MyColors.primaryColor,
-                    size: 20,
+                    size: isMobile ? 18 : 20,
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
+                Expanded(
                   child: MyText(
                     title: "Get in Touch",
-                    fontSize: 16,
+                    fontSize: isMobile ? 14 : 16,
                     fontWeight: FontWeight.bold,
                     color: MyColors.primaryColor,
                   ),
@@ -432,28 +455,30 @@ class _MyDrawerState extends State<MyDrawer>
               ],
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: isMobile ? 12 : 16),
 
             // Contact Items
             _buildContactItem(
               icon: Icons.phone_rounded,
               text: "+1 (555) 123-4567",
               label: "Call Us",
+              isMobile: isMobile,
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: isMobile ? 8 : 12),
 
             _buildContactItem(
               icon: Icons.email_rounded,
               text: "contact@healthcareplus.com",
               label: "Email Us",
+              isMobile: isMobile,
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: isMobile ? 12 : 16),
 
             // Emergency Notice
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(isMobile ? 8 : 12),
               decoration: BoxDecoration(
                 color: Colors.red.shade50,
                 borderRadius: BorderRadius.circular(8),
@@ -464,14 +489,14 @@ class _MyDrawerState extends State<MyDrawer>
                   Icon(
                     Icons.emergency,
                     color: Colors.red.shade600,
-                    size: 16,
+                    size: isMobile ? 14 : 16,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       "24/7 Emergency Care Available",
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: isMobile ? 10 : 12,
                         fontWeight: FontWeight.w600,
                         color: Colors.red.shade700,
                       ),
@@ -490,11 +515,12 @@ class _MyDrawerState extends State<MyDrawer>
     required IconData icon,
     required String text,
     required String label,
+    required bool isMobile,
   }) {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(6),
+          padding: EdgeInsets.all(isMobile ? 4 : 6),
           decoration: BoxDecoration(
             color: MyColors.primaryColor.withOpacity(0.1),
             borderRadius: BorderRadius.circular(6),
@@ -502,7 +528,7 @@ class _MyDrawerState extends State<MyDrawer>
           child: Icon(
             icon,
             color: MyColors.primaryColor,
-            size: 16,
+            size: isMobile ? 14 : 16,
           ),
         ),
         const SizedBox(width: 12),
@@ -513,14 +539,14 @@ class _MyDrawerState extends State<MyDrawer>
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: isMobile ? 10 : 12,
                   color: Colors.grey.shade600,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               MyText(
                 title: text,
-                fontSize: 14,
+                fontSize: isMobile ? 12 : 14,
                 fontWeight: FontWeight.w600,
                 color: MyColors.primaryColor,
               ),
@@ -531,134 +557,3 @@ class _MyDrawerState extends State<MyDrawer>
     );
   }
 }
-
-
-// import 'package:doctor_demo/res/components/my_text.dart';
-// import 'package:doctor_demo/res/components/my_text_button.dart';
-// import 'package:doctor_demo/res/my_colors/my_colors.dart';
-// import 'package:flutter/material.dart';
-//
-//
-// class MyDrawer extends StatelessWidget {
-//   const MyDrawer({super.key, this.servicesOnTap, this.aboutOnTap, this.contactsOnTap,this.homeOnTap});
-//
-//   final void Function()? homeOnTap;
-//   final void Function()? aboutOnTap;
-//   final void Function()? servicesOnTap;
-//   final void Function()? contactsOnTap;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//
-//     final width = MediaQuery.of(context).size.width;
-//     final height = MediaQuery.of(context).size.height;
-//
-//     return Drawer(
-//         child: Container(
-//           color: Colors.white,
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//
-//               Column(
-//                 children: [
-//                   SizedBox(height: height * 0.14,),
-//
-//                   const Center(
-//                     child: Padding(
-//                         padding: EdgeInsets.only(top: 6.0),
-//                         child: MyText(title: "Clinic Name",fontSize: 42,color: MyColors.primaryColor,fontWeight: FontWeight.bold,fontFamily: 'Oswald',letterSpacing: 2,)
-//                     ),
-//                   ),
-//
-//                   SizedBox(height: height * 0.1,),
-//
-//
-//                   MyTextButton(
-//                     width: width * 0.66,
-//                     alignment: Alignment.topLeft,
-//                     padding: const EdgeInsets.only(left: 6,top: 5,bottom: 5),
-//                     margin: EdgeInsets.only(left: width * 0.02),
-//                     borderRadius: 6,
-//                     title: "Home",
-//                     fontSize: 24,
-//                     fontWeight: FontWeight.bold,
-//                     textColor: MyColors.primaryColor,
-//                     onTap: homeOnTap,
-//                     backgroundColor: Colors.grey.withOpacity(0.2),
-//                   ),
-//                   SizedBox(
-//                     height: height * 0.01,
-//                   ),
-//                   MyTextButton(
-//                     width: width * 0.66,
-//                     alignment: Alignment.topLeft,
-//                     padding: const EdgeInsets.only(left: 6,top: 5,bottom: 5),
-//                     margin: EdgeInsets.only(left: width * 0.02),
-//                     borderRadius: 6,
-//                     title: "About",
-//                     fontSize: 24,
-//                     fontWeight: FontWeight.bold,
-//                     textColor: MyColors.primaryColor,
-//                     onTap: aboutOnTap,
-//                     backgroundColor: Colors.grey.withOpacity(0.2),
-//                   ),
-//                   SizedBox(
-//
-//                     height: height * 0.01,
-//                   ),
-//                   MyTextButton(
-//                     width: width * 0.66,
-//                     alignment: Alignment.topLeft,
-//                     padding: const EdgeInsets.only(left: 6,top: 5,bottom: 5),
-//                     margin: EdgeInsets.only(left: width * 0.02),
-//                     borderRadius: 6,
-//                     title: "Services",
-//                     fontSize: 24,
-//                     fontWeight: FontWeight.bold,
-//                     textColor:MyColors.primaryColor,
-//                     onTap: servicesOnTap,
-//                     backgroundColor: Colors.grey.withOpacity(0.2),
-//                   ),
-//                   SizedBox(
-//                     height: height * 0.01,
-//                   ),
-//                   MyTextButton(
-//                     width: width * 0.66,
-//                     alignment: Alignment.topLeft,
-//                     padding: const EdgeInsets.only(left: 6,top: 5,bottom: 5),
-//                     margin: EdgeInsets.only(left: width * 0.02),
-//                     borderRadius: 6,
-//                     title: "Contact Us",
-//                     fontSize: 24,
-//                     fontWeight: FontWeight.bold,
-//                     textColor: MyColors.primaryColor,
-//                     onTap: contactsOnTap,
-//                     backgroundColor: Colors.grey.withOpacity(0.2),
-//                   ),
-//                   SizedBox(
-//                     height: height * 0.01,
-//                   )
-//                 ],
-//               ),
-//
-//
-//               /// contact
-//               Padding(
-//                 padding: const EdgeInsets.only(left: 12.0),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     const MyText(title: "+00 0000000000",fontSize: 20,fontWeight: FontWeight.bold,color: MyColors.primaryColor,),
-//                     const MyText(title: "clinicName@gmail.com",fontSize: 20,fontWeight: FontWeight.bold,color: MyColors.primaryColor,),
-//                     SizedBox(height: height * 0.04,)
-//                   ],
-//                 ),
-//               )
-//             ],
-//           ),
-//         )
-//     );
-//   }
-// }

@@ -9,6 +9,7 @@ class MyText extends StatelessWidget {
   final String? fontFamily;
   final double? letterSpacing;
   final double? wordSpacing;
+  final double? height;
 
   const MyText(
       {super.key,
@@ -20,15 +21,15 @@ class MyText extends StatelessWidget {
         this.fontFamily,
         this.letterSpacing,
         this.wordSpacing,
+        this.height,
       });
 
   @override
   Widget build(BuildContext context) {
     return Text(
       title,
-
       style:
-      TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: color,fontFamily: fontFamily,letterSpacing: letterSpacing,wordSpacing: wordSpacing),
+      TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: color,fontFamily: fontFamily,letterSpacing: letterSpacing,wordSpacing: wordSpacing,height: height),
       textAlign: textAlign,
     );
   }

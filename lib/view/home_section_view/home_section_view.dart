@@ -216,11 +216,12 @@ class _HomeSectionViewState extends State<HomeSectionView>
                 // Main heading - improved mobile sizing
                 MyText(
                   title: 'Your Smile is\nOur Priority',
-                  fontSize: isMobile ? 36 : 64,
+                  fontSize: isMobile ? 40 : 64,
                   fontWeight: FontWeight.w800,
                   fontFamily: 'Oswald',
                   color: MyColors.whiteColor,
                   textAlign: isMobile ? TextAlign.center : TextAlign.start,
+                  height: 0,
                 ),
                 SizedBox(height: isMobile ? 16 : 20),
 
@@ -413,7 +414,7 @@ class _HomeSectionViewState extends State<HomeSectionView>
         elevation: 8,
         shadowColor: Colors.black.withOpacity(0.3),
         padding: EdgeInsets.symmetric(
-          horizontal: isMobile ? 24 : 28,
+          horizontal: isMobile ? 16 : 28,
           vertical: isMobile ? 14 : 18,
         ),
         shape: RoundedRectangleBorder(

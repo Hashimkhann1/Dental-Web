@@ -29,6 +29,9 @@ class _OurServicesSectionState extends State<OurServicesSection>
   List<Animation<double>> _cardAnimations = [];
   List<Animation<Offset>> _cardSlideAnimations = [];
 
+  // Add this flag to prevent multiple triggers
+  bool _hasTriggeredAnimation = false;
+
   @override
   void initState() {
     super.initState();
@@ -116,6 +119,27 @@ class _OurServicesSectionState extends State<OurServicesSection>
 
     // Start background animation
     _backgroundController.repeat(reverse: true);
+
+    // Add post-frame callback to check if we need to start animations immediately
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAndStartAnimations();
+    });
+  }
+
+  void _checkAndStartAnimations() {
+    // Force start animations if user scrolled to this section already
+    final scrollOffset = context.read<DisplayOffset>().state.scrollOffsetValue;
+    final isMobile = Responsive.isMobile(context);
+
+    if (!_hasTriggeredAnimation) {
+      if (isMobile && scrollOffset >= 1900) {
+        _startAnimations();
+      } else if (Responsive.isTablet(context) && scrollOffset >= 2006) {
+        _startAnimations();
+      } else if (!isMobile && !Responsive.isTablet(context) && scrollOffset >= 1510) {
+        _startAnimations();
+      }
+    }
   }
 
   List<Map<String, dynamic>> servicesData = [
@@ -165,40 +189,42 @@ class _OurServicesSectionState extends State<OurServicesSection>
 
     return BlocBuilder<DisplayOffset, ScrollOffset>(
       buildWhen: (previous, current) {
-        if (isMobile) {
-          if ((current.scrollOffsetValue >= 1900 &&
-              current.scrollOffsetValue <= 2000) ||
-              _controller.isAnimating) {
-            return true;
-          } else {
-            return false;
-          }
-        } else if (Responsive.isTablet(context)) {
-          if ((current.scrollOffsetValue >= 2006 &&
-              current.scrollOffsetValue <= 2100) ||
-              _controller.isAnimating) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          if ((current.scrollOffsetValue >= 1510 &&
-              current.scrollOffsetValue <= 1600) ||
-              _controller.isAnimating) {
-            return true;
-          } else {
-            return false;
-          }
+        // Always rebuild when animations are running
+        if (_controller.isAnimating || _backgroundController.isAnimating) {
+          return true;
         }
+
+        // More lenient scroll detection for mobile
+        bool shouldTrigger = false;
+
+        if (isMobile) {
+          shouldTrigger = current.scrollOffsetValue >= 1850;
+        } else if (Responsive.isTablet(context)) {
+          shouldTrigger = current.scrollOffsetValue >= 1950;
+        } else {
+          shouldTrigger = current.scrollOffsetValue >= 1450;
+        }
+
+        // Always return true if we should trigger or if scroll position changed significantly
+        return shouldTrigger || (current.scrollOffsetValue - previous.scrollOffsetValue).abs() > 50;
       },
       builder: (context, state) {
-        if (isMobile) {
-          if (state.scrollOffsetValue > 1952) {
-            _startAnimations();
+        // Trigger animations with more lenient conditions
+        if (!_hasTriggeredAnimation) {
+          bool shouldStart = false;
+
+          if (isMobile && state.scrollOffsetValue >= 1850) {
+            shouldStart = true;
+          } else if (Responsive.isTablet(context) && state.scrollOffsetValue >= 1950) {
+            shouldStart = true;
+          } else if (!isMobile && !Responsive.isTablet(context) && state.scrollOffsetValue >= 1450) {
+            shouldStart = true;
           }
-        } else {
-          if (state.scrollOffsetValue > 1530) {
-            _startAnimations();
+
+          if (shouldStart) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _startAnimations();
+            });
           }
         }
 
@@ -664,6 +690,9 @@ class _OurServicesSectionState extends State<OurServicesSection>
   }
 
   void _startAnimations() {
+    if (_hasTriggeredAnimation) return;
+
+    _hasTriggeredAnimation = true;
     _controller.forward();
 
     // Start card animations with delays
@@ -689,176 +718,3 @@ class _OurServicesSectionState extends State<OurServicesSection>
     super.dispose();
   }
 }
-
-
-// import 'package:doctor_demo/res/components/my_sevices_card/my_sevices_card.dart';
-// import 'package:doctor_demo/res/components/my_text.dart';
-// import 'package:doctor_demo/res/my_colors/my_colors.dart';
-// import 'package:doctor_demo/res/responsive/responsive.dart';
-// import 'package:doctor_demo/res/scroll_offset/scroll_offset.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-//
-// class OurServicesSection extends StatefulWidget {
-//   const OurServicesSection({super.key});
-//
-//   @override
-//   State<OurServicesSection> createState() => _OurServicesSectionState();
-// }
-//
-// class _OurServicesSectionState extends State<OurServicesSection>
-//     with TickerProviderStateMixin {
-//   late AnimationController _controller;
-//   late Animation<double> headingTextRevelAnimation;
-//   late Animation<double> textOpacityAnimation;
-//
-//   @override
-//   void initState() {
-//     _controller = AnimationController(
-//       vsync: this,
-//       duration: const Duration(milliseconds: 2300),
-//     );
-//
-//     headingTextRevelAnimation = Tween<double>(begin: 100.0, end: 0.0).animate(
-//         CurvedAnimation(
-//             parent: _controller,
-//             curve: const Interval(0.0, 0.2, curve: Curves.easeOut)));
-//
-//     textOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-//         CurvedAnimation(
-//             parent: _controller,
-//             curve: const Interval(0.0, 0.1, curve: Curves.easeOut)));
-//
-//
-//     super.initState();
-//   }
-//
-//   List<String> servicesData = [
-//     "Root Canal (painless)",
-//     "Dental Implants",
-//     "Paediatric Dentistry",
-//     "Orthodontic Treatment",
-//     "Restorative Dentistry",
-//     "Cosmetic Dentistry"
-//   ];
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final width = MediaQuery.of(context).size.width;
-//     final height = MediaQuery.of(context).size.height;
-//
-//     return BlocBuilder<DisplayOffset, ScrollOffset>(
-//       buildWhen: (previous, current) {
-//         if (Responsive.isMobile(context)) {
-//           if ((current.scrollOffsetValue >= 1900 &&
-//                   current.scrollOffsetValue <= 2000) ||
-//               _controller.isAnimating) {
-//             return true;
-//           } else {
-//             return false;
-//           }
-//         }else if(Responsive.isTablet(context)) {
-//           if ((current.scrollOffsetValue >= 2006 &&
-//               current.scrollOffsetValue <= 2100) ||
-//               _controller.isAnimating) {
-//             return true;
-//           } else {
-//             return false;
-//           }
-//         }
-//         else {
-//           if ((current.scrollOffsetValue >= 1510 &&
-//                   current.scrollOffsetValue <= 1600) ||
-//               _controller.isAnimating) {
-//             return true;
-//           } else {
-//             return false;
-//           }
-//         }
-//       },
-//       builder: (context, state) {
-//         if (Responsive.isMobile(context)) {
-//           if (state.scrollOffsetValue > 1952) {
-//             _controller.forward();
-//           }
-//         } else {
-//           if (state.scrollOffsetValue > 1530) {
-//             _controller.forward();
-//           }
-//         }
-//
-//         return Container(
-//           color: MyColors.primaryColor,
-//           width: width,
-//           child: Column(
-//             children: [
-//               SizedBox(
-//                 width: 1240,
-//                 child: Column(
-//                   mainAxisSize: MainAxisSize.min,
-//                   children: [
-//                     SizedBox(
-//                       height: height * 0.03,
-//                     ),
-//
-//                     Container(
-//                       // color: Colors.white,
-//                       height: Responsive.isMobile(context)
-//                           ? height * 0.14
-//                           : height * 0.1,
-//                       padding:
-//                           EdgeInsets.only(top: headingTextRevelAnimation.value),
-//                       child: FadeTransition(
-//                         opacity: textOpacityAnimation,
-//                         child: const MyText(
-//                           title: "Our Services",
-//                           fontSize: 50,
-//                           fontWeight: FontWeight.bold,
-//                           color: MyColors.whiteColor,
-//                           fontFamily: 'Oswald',
-//                         ),
-//                       ),
-//                     ),
-//                     SizedBox(height: Responsive.isMobile(context) ? height * 0.01 : height * 0.04),
-//                     // Using Flexible instead of Expanded
-//                     Flexible(
-//                       fit: FlexFit
-//                           .loose, // Allows the child to take up its necessary space
-//                       child: GridView.builder(
-//                         itemCount: servicesData.length,
-//                         shrinkWrap: true,
-//                         physics: const NeverScrollableScrollPhysics(),
-//                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                             crossAxisCount: Responsive.isMobile(context)
-//                                 ? 1
-//                                 : Responsive.isTablet(context)
-//                                     ? 2
-//                                     : 3,
-//                             crossAxisSpacing:
-//                                 Responsive.isTablet(context) ? 0 : 10,
-//                             mainAxisSpacing:
-//                                 Responsive.isTablet(context) ? 16 : 10,
-//                             childAspectRatio: Responsive.isMobile(context)
-//                                 ? 2 / 1.1
-//                                 : Responsive.isTablet(context)
-//                                     ? 2 / 1
-//                                     : 2 / 1.4),
-//                         itemBuilder: (context, index) {
-//                           return MyServicesCard(image: 'image', title: servicesData[index].toString(), description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",index: index,);
-//                         },
-//                       ),
-//                     ),
-//
-//                     SizedBox(
-//                       height: height * 0.06,
-//                     )
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }

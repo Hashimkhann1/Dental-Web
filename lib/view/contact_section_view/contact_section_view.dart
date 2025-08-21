@@ -442,7 +442,7 @@ class _ContactSectionViewState extends State<ContactSectionView>
     return Transform.translate(
       offset: Offset(0, _formSlideAnimation.value),
       child: Container(
-        padding: EdgeInsets.all(Responsive.isMobile(context) ? 24 : 32),
+        padding: EdgeInsets.all(Responsive.isMobile(context) ? 18 : 32),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -480,17 +480,17 @@ class _ContactSectionViewState extends State<ContactSectionView>
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Book Appointment",
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: Responsive.isMobile(context) ? 20 : 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         "Schedule your visit with us",
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: Responsive.isMobile(context) ? 12 : 14,
                           color: Colors.grey.shade600,
                         ),
                       ),

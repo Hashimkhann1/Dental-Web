@@ -1,9 +1,11 @@
 import 'package:doctor_demo/res/components/my_text.dart';
-import 'package:doctor_demo/res/components/my_text_button.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
 import 'package:doctor_demo/res/responsive/responsive.dart';
+import 'package:doctor_demo/view_model/contact_view_model/contact_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart'; // Add this import for date formatting
 
 class ContactSectionView extends StatefulWidget {
   const ContactSectionView({super.key});
@@ -33,12 +35,15 @@ class _ContactSectionViewState extends State<ContactSectionView>
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
   final _messageController = TextEditingController();
+  final _dateController = TextEditingController(); // Added date controller
 
-  bool _isSubmitting = false;
+  DateTime? _selectedDate; // Added selected date variable
+  late ContactBloc _contactBloc;
 
   @override
   void initState() {
     super.initState();
+    _contactBloc = ContactBloc();
     _initializeAnimations();
     _startAnimations();
   }
@@ -134,50 +139,105 @@ class _ContactSectionViewState extends State<ContactSectionView>
     _phoneController.dispose();
     _addressController.dispose();
     _messageController.dispose();
+    _dateController.dispose(); // Added dispose for date controller
+    _contactBloc.close();
     super.dispose();
+  }
+
+  // Added date picker function
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now().add(const Duration(days: 1)),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: MyColors.primaryColor,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: Colors.black,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+        _dateController.text = DateFormat('MMM dd, yyyy').format(picked);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    return AnimatedBuilder(
-      animation: Listenable.merge([_mainController, _formController, _contactController]),
-      builder: (context, child) {
-        return Container(
-          width: _getContainerWidth(width),
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.blue.shade50.withOpacity(0.5),
-                Colors.white,
-                Colors.purple.shade50.withOpacity(0.3),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                blurRadius: 30,
-                offset: const Offset(0, 15),
+    return BlocProvider.value(
+      value: _contactBloc,
+      child: BlocListener<ContactBloc, ContactState>(
+        listener: (context, state) {
+          if (state is ContactError) {
+            ContactBloc.showErrorDialog(context, state.error);
+          } else if (state is FormSubmitted) {
+            ContactBloc.showSuccessSnackBar(context);
+            // Clear form
+            _formKey.currentState!.reset();
+            _nameController.clear();
+            _emailController.clear();
+            _phoneController.clear();
+            _addressController.clear();
+            _messageController.clear();
+            _dateController.clear(); // Added clear for date controller
+            _selectedDate = null; // Reset selected date
+          } else if (state is FormSubmissionError) {
+            ContactBloc.showErrorDialog(context, state.error);
+          }
+        },
+        child: AnimatedBuilder(
+          animation: Listenable.merge([_mainController, _formController, _contactController]),
+          builder: (context, child) {
+            return Container(
+              width: _getContainerWidth(width),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.blue.shade50.withOpacity(0.5),
+                    Colors.white,
+                    Colors.purple.shade50.withOpacity(0.3),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 30,
+                    offset: const Offset(0, 15),
+                  ),
+                ],
               ),
-            ],
-          ),
-          padding: EdgeInsets.all(Responsive.isMobile(context) ? 20 : 40),
-          child: Transform.translate(
-            offset: Offset(0, _slideUpAnimation.value),
-            child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: Responsive.isMobile(context)
-                  ? _buildMobileLayout()
-                  : _buildDesktopLayout(),
-            ),
-          ),
-        );
-      },
+              padding: EdgeInsets.all(Responsive.isMobile(context) ? 20 : 40),
+              child: Transform.translate(
+                offset: Offset(0, _slideUpAnimation.value),
+                child: FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Responsive.isMobile(context)
+                      ? _buildMobileLayout()
+                      : _buildDesktopLayout(),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -264,11 +324,12 @@ class _ContactSectionViewState extends State<ContactSectionView>
           // Contact details with staggered animations
           _buildAnimatedContactDetail(
             Icons.phone_rounded,
-            "Call Us",
-            "+1 (555) 123-4567",
+            "What's App Us",
+            "+92 313 9217887",
             "Available 24/7",
             _staggeredAnimation1,
             Colors.green,
+            onTap: _handleWhatsAppTap,
           ),
 
           const SizedBox(height: 24),
@@ -276,10 +337,11 @@ class _ContactSectionViewState extends State<ContactSectionView>
           _buildAnimatedContactDetail(
             Icons.email_rounded,
             "Email Us",
-            "contact@healthcare.com",
+            "hmk182002@gmail.com",
             "Quick response guaranteed",
             _staggeredAnimation2,
             Colors.blue,
+            onTap: _handleEmailTap,
           ),
 
           const SizedBox(height: 24),
@@ -330,91 +392,111 @@ class _ContactSectionViewState extends State<ContactSectionView>
     );
   }
 
+  // Handle WhatsApp tap
+  void _handleWhatsAppTap() {
+    _contactBloc.add(LaunchWhatsAppEvent());
+  }
+
+  // Handle Email tap
+  void _handleEmailTap() {
+    _contactBloc.add(LaunchEmailEvent());
+  }
+
   Widget _buildAnimatedContactDetail(
       IconData icon,
       String title,
       String detail,
       String subtitle,
       Animation<double> animation,
-      Color iconColor,
-      ) {
+      Color iconColor, {
+        VoidCallback? onTap,
+      }) {
     return FadeTransition(
       opacity: animation,
       child: Transform.translate(
         offset: Offset(0, (1 - animation.value) * 20),
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: iconColor.withOpacity(0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+              border: Border.all(
                 color: iconColor.withOpacity(0.1),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
+                width: 1,
               ),
-            ],
-            border: Border.all(
-              color: iconColor.withOpacity(0.1),
-              width: 1,
             ),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [iconColor, iconColor.withOpacity(0.7)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: iconColor.withOpacity(0.3),
-                      blurRadius: 15,
-                      offset: const Offset(0, 8),
+            child: Row(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [iconColor, iconColor.withOpacity(0.7)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                  ],
-                ),
-                child: Icon(
-                  icon,
-                  color: Colors.white,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    MyText(
-                      title: title,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade800,
-                    ),
-                    const SizedBox(height: 4),
-                    MyText(
-                      title: detail,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: iconColor,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey.shade600,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: iconColor.withOpacity(0.3),
+                        blurRadius: 15,
+                        offset: const Offset(0, 8),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                  child: Icon(
+                    icon,
+                    color: Colors.white,
+                    size: 28,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MyText(
+                        title: title,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade800,
+                      ),
+                      const SizedBox(height: 4),
+                      MyText(
+                        title: detail,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: iconColor,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (onTap != null)
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.grey.shade400,
+                    size: 16,
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -507,7 +589,12 @@ class _ContactSectionViewState extends State<ContactSectionView>
               else
                 _buildDesktopFormFields(),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
+
+              // Date picker field
+              _buildDatePickerField(),
+
+              const SizedBox(height: 20),
 
               _buildEnhancedTextField(
                 controller: _messageController,
@@ -524,6 +611,69 @@ class _ContactSectionViewState extends State<ContactSectionView>
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // Added date picker field widget
+  Widget _buildDatePickerField() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: TextFormField(
+        controller: _dateController,
+        readOnly: true,
+        onTap: () => _selectDate(context),
+        decoration: InputDecoration(
+          labelText: "Appointment Date",
+          hintText: "Select your preferred date",
+          prefixIcon: Icon(
+            Icons.calendar_today_rounded,
+            color: MyColors.primaryColor.withOpacity(0.7),
+          ),
+          suffixIcon: Icon(
+            Icons.arrow_drop_down,
+            color: MyColors.primaryColor.withOpacity(0.7),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(
+              color: Colors.grey.shade200,
+              width: 1.5,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(
+              color: MyColors.primaryColor,
+              width: 2,
+            ),
+          ),
+          filled: true,
+          fillColor: Colors.grey.shade50,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please select an appointment date';
+          }
+          return null;
+        },
       ),
     );
   }
@@ -676,119 +826,95 @@ class _ContactSectionViewState extends State<ContactSectionView>
   }
 
   Widget _buildSubmitButton() {
-    return Container(
-      width: double.infinity,
-      height: 56,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [MyColors.primaryColor, Colors.blue.shade600],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: MyColors.primaryColor.withOpacity(0.4),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+    return BlocBuilder<ContactBloc, ContactState>(
+      builder: (context, state) {
+        final isSubmitting = state is FormSubmitting;
+
+        return Container(
+          width: double.infinity,
+          height: 56,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [MyColors.primaryColor, Colors.blue.shade600],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: MyColors.primaryColor.withOpacity(0.4),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: _isSubmitting ? null : _handleSubmit,
-          child: Container(
-            alignment: Alignment.center,
-            child: _isSubmitting
-                ? const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation(Colors.white),
-                  ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: isSubmitting ? null : _handleSubmit,
+              child: Container(
+                alignment: Alignment.center,
+                child: isSubmitting
+                    ? const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      "Submitting...",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                )
+                    : const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.send_rounded,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      "Book Appointment",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 12),
-                Text(
-                  "Submitting...",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            )
-                : const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.send_rounded,
-                  color: Colors.white,
-                  size: 20,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  "Book Appointment",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   Future<void> _handleSubmit() async {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isSubmitting = true;
-      });
-
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 2));
-
-      if (mounted) {
-        setState(() {
-          _isSubmitting = false;
-        });
-
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.white),
-                SizedBox(width: 12),
-                Text('Appointment request submitted successfully!'),
-              ],
-            ),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        );
-
-        // Clear form
-        _formKey.currentState!.reset();
-        _nameController.clear();
-        _emailController.clear();
-        _phoneController.clear();
-        _addressController.clear();
-        _messageController.clear();
-      }
+      _contactBloc.add(SubmitFormEvent(
+        name: _nameController.text,
+        email: _emailController.text,
+        phone: _phoneController.text,
+        address: _addressController.text,
+        message: _messageController.text,
+        appointmentDate: _selectedDate!,
+      ));
     }
   }
 
@@ -798,172 +924,3 @@ class _ContactSectionViewState extends State<ContactSectionView>
     return screenWidth * 0.85;
   }
 }
-
-
-
-// import 'package:doctor_demo/res/components/my_text.dart';
-// import 'package:doctor_demo/res/components/my_text_button.dart';
-// import 'package:doctor_demo/res/my_colors/my_colors.dart';
-// import 'package:doctor_demo/res/responsive/responsive.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-//
-// class ContactSectionView extends StatelessWidget {
-//   const ContactSectionView({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//
-//     final width = MediaQuery.of(context).size.width;
-//
-//     return Container(
-//       width: Responsive.isMobile(context) ? width * 0.97 : Responsive.isTablet(context) ? width * 0.94 : width * 0.68,
-//       padding: const EdgeInsets.all(16.0),
-//       child: Responsive.isMobile(context) ? Column(
-//         children: [
-//           _buildContactUsSection(context),
-//           const SizedBox(height: 32),
-//           _buildBookAppointmentForm(context),
-//         ],
-//       ) : Row(
-//         children: [
-//           Expanded(
-//             flex: 2,
-//             child: _buildContactUsSection(context),
-//           ),
-//           const SizedBox(width: 32),
-//           Expanded(
-//             flex: 2,
-//             child: _buildBookAppointmentForm(context),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-//
-//
-// Widget _buildContactUsSection(BuildContext context) {
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       const MyText(title: "Contact Us",fontSize: 30,fontWeight: FontWeight.bold,color: MyColors.primaryColor,),
-//       const SizedBox(height: 8),
-//       MyText(title: "Make An\nAppointment",fontSize: Responsive.isMobile(context) ? 50 : 60,fontWeight: FontWeight.w800,fontFamily: 'Oswald',letterSpacing: 2,),
-//       const SizedBox(height: 8),
-//       Text(
-//         "Feel free to ask something we are here",
-//         style: TextStyle(
-//           fontSize: 16,
-//           color: Colors.grey[600],
-//         ),
-//       ),
-//       const SizedBox(height: 32),
-//       _buildContactDetail(Icons.phone, "Call Us At", "(+00) 000000000"),
-//       const SizedBox(height: 16),
-//       _buildContactDetail(Icons.email, "Email Us On", "clinicName@gmail.com.com"),
-//       const SizedBox(height: 16),
-//       _buildContactDetail(Icons.location_on, "Address", "111 city street etc"),
-//     ],
-//   );
-// }
-//
-// Widget _buildContactDetail(IconData icon, String title, String detail) {
-//   return Row(
-//     children: [
-//       CircleAvatar(
-//         radius: 24,
-//         backgroundColor: Colors.blue,
-//         child: Icon(
-//           icon,
-//           color: Colors.white,
-//         ),
-//       ),
-//       const SizedBox(width: 16),
-//       Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           MyText(title: title,fontSize: 21,fontWeight: FontWeight.bold,),
-//           MyText(title: detail,fontSize: 17,fontWeight: FontWeight.bold,color: MyColors.blackColor.withOpacity(0.6),),
-//         ],
-//       ),
-//     ],
-//   );
-// }
-//
-// Widget _buildBookAppointmentForm(BuildContext context) {
-//
-//   return Container(
-//     padding: EdgeInsets.all(Responsive.isMobile(context) ? 8 : 16),
-//     decoration: BoxDecoration(
-//       color: Colors.grey.withOpacity(0.1),
-//       borderRadius: BorderRadius.circular(12),
-//     ),
-//     child: Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         const Text(
-//           "Book Appointment",
-//           style: TextStyle(
-//             fontSize: 20,
-//             fontWeight: FontWeight.bold,
-//           ),
-//         ),
-//         const SizedBox(height: 16),
-//         Responsive.isMobile(context) ? Column(
-//           children: [
-//             _buildTextField("Name"),
-//             const SizedBox(height: 16),
-//             _buildTextField("Email"),
-//             const SizedBox(height: 16),
-//             _buildTextField("Number"),
-//             const SizedBox(height: 16),
-//             _buildTextField("Address"),
-//           ],
-//         ) : Row(
-//           children: [
-//             Expanded(
-//               child: _buildTextField("Name"),
-//             ),
-//             const SizedBox(width: 16),
-//             Expanded(
-//               child: _buildTextField("Email"),
-//             ),
-//           ],
-//         ),
-//         const SizedBox(height: 16),
-//         Responsive.isMobile(context) ? const SizedBox() : Row(
-//           children: [
-//             Expanded(
-//               child: _buildTextField("Number"),
-//             ),
-//             const SizedBox(width: 16),
-//             Expanded(
-//               child: _buildTextField("Address"),
-//             ),
-//           ],
-//         ),
-//         SizedBox(height: Responsive.isMobile(context) ? 8 : 16),
-//         _buildTextField("Message", maxLines: 4),
-//         const SizedBox(height: 24),
-//         const MyTextButton(title: "Submit",fontSize: 18,fontWeight: FontWeight.bold,backgroundColor: MyColors.primaryColor,textColor: CupertinoColors.white,width: 124,height: 38,borderRadius: 8,)
-//       ],
-//     ),
-//   );
-// }
-//
-// Widget _buildTextField(String label, {int maxLines = 1}) {
-//   return TextField(
-//     maxLines: maxLines,
-//     decoration: InputDecoration(
-//       labelText: label,
-//       border: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(8),
-//         borderSide: BorderSide.none
-//       ),
-//
-//       filled: true,
-//       fillColor: Colors.white,
-//     ),
-//   );
-// }

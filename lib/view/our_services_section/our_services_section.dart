@@ -1,3 +1,4 @@
+import 'package:doctor_demo/l10n/app_localizations.dart';
 import 'package:doctor_demo/res/components/my_sevices_card/my_sevices_card.dart';
 import 'package:doctor_demo/res/components/my_text.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
@@ -291,7 +292,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                                           ),
                                           const SizedBox(width: 8),
                                           MyText(
-                                            title: "Our Professional Services",
+                                            title: AppLocalizations.of(context)!.ourProfessionalServices,
                                             fontSize: isMobile ? 12 : 14,
                                             color: Colors.white,
                                             fontWeight: FontWeight.w500,
@@ -304,7 +305,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
 
                                     // Main Title
                                     MyText(
-                                      title: "Our Services",
+                                      title: AppLocalizations.of(context)!.ourServices,
                                       fontSize: isMobile ? 36 : 52,
                                       fontWeight: FontWeight.w800,
                                       color: MyColors.whiteColor,
@@ -323,7 +324,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                                         horizontal: isMobile ? 16 : 0,
                                       ),
                                       child: MyText(
-                                        title: "Comprehensive dental care with state-of-the-art technology and personalized treatment plans",
+                                        title: AppLocalizations.of(context)!.ourServicesDescription,
                                         fontSize: isMobile ? 16 : 18,
                                         color: Colors.white.withOpacity(0.9),
                                         textAlign: TextAlign.center,
@@ -506,7 +507,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
         child: Column(
           children: [
             MyText(
-              title: "Ready to Transform Your Smile?",
+              title: AppLocalizations.of(context)!.readyToTransform,
               fontSize: isMobile ? 22 : 28,
               fontWeight: FontWeight.w700,
               color: Colors.white,
@@ -520,7 +521,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                 maxWidth: isMobile ? double.infinity : 500,
               ),
               child: MyText(
-                title: "Schedule your consultation today and take the first step towards optimal dental health",
+                title: AppLocalizations.of(context)!.consultationDescription,
                 fontSize: isMobile ? 14 : 16,
                 color: Colors.white.withOpacity(0.9),
                 textAlign: TextAlign.center,
@@ -559,7 +560,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                         ),
                         const SizedBox(width: 8),
                         MyText(
-                          title: "Book Appointment",
+                          title: AppLocalizations.of(context)!.bookAppointment,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: MyColors.primaryColor,
@@ -598,7 +599,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                         ),
                         const SizedBox(width: 8),
                         MyText(
-                          title: "Contact Us",
+                          title: AppLocalizations.of(context)!.contactUs,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -637,7 +638,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                       ),
                       const SizedBox(width: 8),
                       MyText(
-                        title: "Book Appointment",
+                        title: AppLocalizations.of(context)!.bookAppointment,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: MyColors.primaryColor,
@@ -673,7 +674,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                       ),
                       const SizedBox(width: 8),
                       MyText(
-                        title: "Contact Us",
+                        title: AppLocalizations.of(context)!.contactUs,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,

@@ -1,3 +1,4 @@
+import 'package:doctor_demo/l10n/app_localizations.dart';
 import 'package:doctor_demo/res/components/my_text.dart';
 import 'package:doctor_demo/res/components/my_text_button.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
@@ -10,15 +11,17 @@ class HeaderSectionView extends StatefulWidget {
     this.homeOnTap,
     required this.aboutOnTap,
     required this.servicesOnTap,
-    required this.contactOnTap,
+    required this.ourExpertOnTap,
     required this.drawertOnTap,
+    required this.bookNowOnTap,
   });
 
   final void Function()? homeOnTap;
   final void Function()? aboutOnTap;
   final void Function()? servicesOnTap;
-  final void Function()? contactOnTap;
+  final void Function()? ourExpertOnTap;
   final void Function()? drawertOnTap;
+  final void Function()? bookNowOnTap;
 
   @override
   State<HeaderSectionView> createState() => _HeaderSectionViewState();
@@ -147,8 +150,8 @@ class _HeaderSectionViewState extends State<HeaderSectionView>
                   ),
                 ),
                 const SizedBox(width: 8),
-                const MyText(
-                  title: "Dentist",
+                MyText(
+                  title: AppLocalizations.of(context)!.dentist,
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
                   color: MyColors.whiteColor,
@@ -228,14 +231,14 @@ class _HeaderSectionViewState extends State<HeaderSectionView>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const MyText(
-                      title: "Dentist",
+                    MyText(
+                      title: AppLocalizations.of(context)!.dentist,
                       fontWeight: FontWeight.bold,
                       fontSize: 28,
                       color: MyColors.whiteColor,
                     ),
                     MyText(
-                      title: "Care & Smile",
+                      title: AppLocalizations.of(context)!.careAndSmile,
                       fontSize: 12,
                       color: MyColors.whiteColor.withOpacity(0.8),
                       fontWeight: FontWeight.w300,
@@ -251,15 +254,16 @@ class _HeaderSectionViewState extends State<HeaderSectionView>
             position: _menuSlideAnimation,
             child: Row(
               children: [
-                _buildNavItem("Home", 0, widget.homeOnTap),
+                _buildNavItem(AppLocalizations.of(context)!.home, 0, widget.homeOnTap),
                 const SizedBox(width: 32),
-                _buildNavItem("About us", 1, widget.aboutOnTap),
+                _buildNavItem(AppLocalizations.of(context)!.aboutUs, 1, widget.aboutOnTap),
                 const SizedBox(width: 32),
-                _buildNavItem("Services", 2, widget.servicesOnTap),
+                _buildNavItem(AppLocalizations.of(context)!.services, 2, widget.servicesOnTap),
                 const SizedBox(width: 32),
-                _buildNavItem("Contact us", 3, widget.contactOnTap),
-                const SizedBox(width: 40),
-                _buildAppointmentButton(),
+                _buildNavItem(AppLocalizations.of(context)!.ourExperts, 3, widget.ourExpertOnTap),
+                const SizedBox(width: 30),
+                // _buildNavItem("Contact us", 4, widget.bookNowOnTap),
+                _buildAppointmentButton(widget.bookNowOnTap),
               ],
             ),
           ),
@@ -297,14 +301,12 @@ class _HeaderSectionViewState extends State<HeaderSectionView>
     );
   }
 
-  Widget _buildAppointmentButton() {
+  Widget _buildAppointmentButton(void Function()? onPressed) {
     return MouseRegion(
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         child: ElevatedButton(
-          onPressed: () {
-            // Add appointment booking logic here
-          },
+          onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
             foregroundColor: MyColors.primaryColor,
@@ -324,8 +326,8 @@ class _HeaderSectionViewState extends State<HeaderSectionView>
                 color: MyColors.primaryColor,
               ),
               const SizedBox(width: 8),
-              const MyText(
-                title: "Book Now",
+              MyText(
+                title: AppLocalizations.of(context)!.bookNow,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: MyColors.primaryColor,
@@ -337,116 +339,3 @@ class _HeaderSectionViewState extends State<HeaderSectionView>
     );
   }
 }
-
-
-// import 'package:doctor_demo/res/components/my_text.dart';
-// import 'package:doctor_demo/res/components/my_text_button.dart';
-// import 'package:doctor_demo/res/my_colors/my_colors.dart';
-// import 'package:doctor_demo/res/responsive/responsive.dart';
-// import 'package:flutter/material.dart';
-//
-// class HeaderSectionView extends StatelessWidget {
-//   const HeaderSectionView({
-//     super.key,
-//     this.homeOnTap,
-//     required this.aboutOnTap,
-//     required this.servicesOnTap,
-//     required this.contactOnTap,
-//     required this.drawertOnTap,
-//   });
-//
-//   final void Function()? homeOnTap;
-//   final void Function()? aboutOnTap;
-//   final void Function()? servicesOnTap;
-//   final void Function()? contactOnTap;
-//   final void Function()? drawertOnTap;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       color: MyColors.primaryColor,
-//       height: Responsive.isMobile(context) ? 50 : 100,
-//       width: MediaQuery.of(context).size.width,
-//       child: Responsive.isMobile(context)
-//           ? Align(
-//         alignment: Alignment.centerLeft,
-//         child: Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: InkWell(
-//             onTap: drawertOnTap,
-//             child: const Icon(
-//               Icons.menu,
-//               size: 34,
-//               color: MyColors.whiteColor,
-//             ),
-//           ),
-//         ),
-//       )
-//           : Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceAround,
-//         children: [
-//           /// logo
-//           Row(
-//             children: [
-//               Image.asset(
-//                 'assets/images/logo.png',
-//                 width: 50,
-//                 height: 50,
-//               ),
-//               const MyText(
-//                 title: "Dentist",
-//                 fontWeight: FontWeight.bold,
-//                 fontSize: 30,
-//                 color: MyColors.whiteColor,
-//               )
-//             ],
-//           ),
-//
-//           /// buttons
-//           Row(
-//             children: [
-//               MyTextButton(
-//                 title: "Home",
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.w500,
-//                 textColor: MyColors.whiteColor,
-//                 onTap: homeOnTap,
-//               ),
-//               const SizedBox(
-//                 width: 28,
-//               ),
-//               MyTextButton(
-//                 title: "About us",
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.w500,
-//                 textColor: MyColors.whiteColor,
-//                 onTap: aboutOnTap,
-//               ),
-//               const SizedBox(
-//                 width: 28,
-//               ),
-//               MyTextButton(
-//                 title: "Services",
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.w500,
-//                 textColor: MyColors.whiteColor,
-//                 onTap: servicesOnTap,
-//               ),
-//               const SizedBox(
-//                 width: 28,
-//               ),
-//               MyTextButton(
-//                 title: "Contact us",
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.w500,
-//                 textColor: MyColors.whiteColor,
-//                 onTap: contactOnTap,
-//               ),
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-//

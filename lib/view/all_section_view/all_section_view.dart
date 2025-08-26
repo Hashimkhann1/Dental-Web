@@ -30,6 +30,7 @@ class _AllSectionViewState extends State<AllSectionView> {
   final aboutSectinokey = GlobalKey();
   final servicesSectinokey = GlobalKey();
   final contactSectinokey = GlobalKey();
+  final bookNowSectinokey = GlobalKey();
 
   @override
   void initState() {
@@ -84,16 +85,16 @@ class _AllSectionViewState extends State<AllSectionView> {
               servicesOnTap: () {
                 ScrollViewModel.scrollToSection(servicesSectinokey);
               },
-              contactOnTap: () {
+              ourExpertOnTap: () {
                 ScrollViewModel.scrollToSection(contactSectinokey);
               },
               drawertOnTap: () {
                 _scaffoldKey.currentState!.openDrawer();
-              },
+              }, bookNowOnTap: () { ScrollViewModel.scrollToSection(bookNowSectinokey); },
             ),
 
             /// home section
-            Container(key: homeSectinokey, child: const HomeSectionView()),
+            Container(key: homeSectinokey, child: HomeSectionView(onBookAppointment: () {ScrollViewModel.scrollToSection(bookNowSectinokey);},)),
 
             /// about section
             Container(key: aboutSectinokey, child: const AboutSectionView()),
@@ -102,11 +103,11 @@ class _AllSectionViewState extends State<AllSectionView> {
             Container(key: servicesSectinokey, child: const OurServicesSection()),
 
             /// our expert team section
-            const OurExpertTeamSectionView(),
+            Container(key: contactSectinokey, child: const OurExpertTeamSectionView()),
             const SizedBox(height: 30),
 
             /// contact section view
-            Container(key: contactSectinokey, child: const ContactSectionView()),
+            Container(key: bookNowSectinokey,child: const ContactSectionView()),
             const SizedBox(height: 100),
 
             /// fotter section view

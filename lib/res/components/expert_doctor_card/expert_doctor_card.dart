@@ -1,8 +1,8 @@
+import 'package:doctor_demo/l10n/app_localizations.dart';
 import 'package:doctor_demo/res/components/my_text.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
 import 'package:doctor_demo/res/responsive/responsive.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class ExpertDoctorCard extends StatefulWidget {
   final String name;
@@ -451,7 +451,7 @@ class _ExpertDoctorCardState extends State<ExpertDoctorCard>
               ),
               const SizedBox(width: 4),
               Text(
-                "Tap for details",
+                AppLocalizations.of(context)!.tapForDetails,
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey.shade700,

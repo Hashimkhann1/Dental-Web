@@ -7,6 +7,7 @@
   "ourExperts": "Our Experts",
   "bookNow": "Book Now",
   "careAndSmile": "Care & Smile",
+  "menu" : "Menu",
   "bookAppointment": "Book Appointment",
   "welcomeToOurClinic": "Welcome To Our Clinic",
   "homeTitle": "Your Smile is\nOur Priority",
@@ -53,14 +54,17 @@
 
    "ourExpertDoctors": "Our Expert Doctors",
    "meetOurTeam": "Meet our team of experienced healthcare professionals dedicated to providing exceptional medical care with compassion and expertise.",
+   "tapForDetails": "Tap for details",
 
 
-   "letsStartConversation": "Let's Start a Conversation",
+   "letsStartConversation": "Let's Start a\n Conversation",
    "conversationDescription": "We're here to help and answer any questions you might have. We look forward to hearing from you.",
    "whatsAppUs": "WhatsApp Us",
    "emailUs": "Email Us",
    "visitUs": "Visit Us",
    "followUs": "Follow Us",
+   "available247": "Available 24/7",
+   "quickResponseGuaranteed": "Quick response guaranteed",
    "scheduleVisit": "Schedule your visit with us",
    "message": "Message",
    "messagePlaceholder": "Tell us about your symptoms or concerns...",
@@ -76,5 +80,20 @@
    "address": "Address",
    "addressPlaceholder": "Enter your address",
    "requiredField": "This field is required",
-   "submitting": "Submitting..."
+   "submitting": "Submitting...",
+
+
+   "quickLinks": "Quick Links",
+   "clinicHours": "Clinic Hours",
+   "healthPriority": "Your Health, Our Priority",
+   "exceptionalHealthcare": "Providing exceptional healthcare services with compassion, expertise, and cutting-edge medical technology. Your wellness is our commitment.",
+   "stayConnected": "Stay connected with us on social media for health tips, updates, and community support.",
+   "closed": "Closed",
+   "mondayFriday": "Monday - Friday",
+   "saturday": "Saturday",
+   "sunday": "Sunday",
+   "emergency": "Emergency",
+   "genInTouch" : "Get in Touch",
+   "callus" : "Call Us"
+
 }

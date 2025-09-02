@@ -1,8 +1,10 @@
 import 'package:doctor_demo/l10n/app_localizations.dart';
 import 'package:doctor_demo/res/scroll_offset/scroll_offset.dart';
 import 'package:doctor_demo/view/all_section_view/all_section_view.dart';
+import 'package:doctor_demo/view/header_section_view/header_section_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 void main() async {
@@ -15,29 +17,34 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Dental Web',
-      locale: const Locale('en'), // default language
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+    return ProviderScope(child: Consumer(builder: (context , language, child) {
 
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      final languageCode = language.watch(languageProvider);
 
-      builder: (context, child) {
-        return Directionality(
-          textDirection: TextDirection.ltr, // LTR lock
-          child: child!,
-        );
-      },
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Dental Web',
+        locale: languageCode,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
 
-      home: BlocProvider(
-        create: (context) => DisplayOffset(ScrollOffset(scrollOffsetValue: 0)),
-        child: const AllSectionView(),
-      ),
-    );
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+
+        builder: (context, child) {
+          return Directionality(
+            textDirection: TextDirection.ltr, // LTR lock
+            child: child!,
+          );
+        },
+
+        home: BlocProvider(
+          create: (context) => DisplayOffset(ScrollOffset(scrollOffsetValue: 0)),
+          child: const AllSectionView(),
+        ),
+      );
+    }));
   }
 }

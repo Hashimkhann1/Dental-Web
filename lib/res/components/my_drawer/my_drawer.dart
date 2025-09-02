@@ -1,5 +1,5 @@
+import 'package:doctor_demo/l10n/app_localizations.dart';
 import 'package:doctor_demo/res/components/my_text.dart';
-import 'package:doctor_demo/res/components/my_text_button.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -226,7 +226,7 @@ class _MyDrawerState extends State<MyDrawer>
                   ),
                 ),
                 child: Text(
-                  "Your Health, Our Priority",
+                  AppLocalizations.of(context)!.healthPriority,
                   style: TextStyle(
                     fontSize: isMobile ? 10 : 12,
                     color: MyColors.primaryColor.withOpacity(0.8),
@@ -243,10 +243,10 @@ class _MyDrawerState extends State<MyDrawer>
 
   Widget _buildMenuSection(double width, double height, bool isMobile) {
     final menuItems = [
-      {'title': 'Home', 'icon': Icons.home_rounded, 'onTap': widget.homeOnTap},
-      {'title': 'About', 'icon': Icons.info_outline_rounded, 'onTap': widget.aboutOnTap},
-      {'title': 'Services', 'icon': Icons.medical_services_rounded, 'onTap': widget.servicesOnTap},
-      {'title': 'Contact Us', 'icon': Icons.contact_phone_rounded, 'onTap': widget.contactsOnTap},
+      {'title': AppLocalizations.of(context)!.home, 'icon': Icons.home_rounded, 'onTap': widget.homeOnTap},
+      {'title': AppLocalizations.of(context)!.aboutUs, 'icon': Icons.info_outline_rounded, 'onTap': widget.aboutOnTap},
+      {'title': AppLocalizations.of(context)!.services, 'icon': Icons.medical_services_rounded, 'onTap': widget.servicesOnTap},
+      {'title': AppLocalizations.of(context)!.contactUs, 'icon': Icons.contact_phone_rounded, 'onTap': widget.contactsOnTap},
     ];
 
     return FadeTransition(
@@ -260,7 +260,7 @@ class _MyDrawerState extends State<MyDrawer>
             Padding(
               padding: const EdgeInsets.only(left: 8, bottom: 16),
               child: Text(
-                "Menu",
+                AppLocalizations.of(context)!.menu,
                 style: TextStyle(
                   fontSize: isMobile ? 14 : 16,
                   fontWeight: FontWeight.w600,
@@ -446,7 +446,7 @@ class _MyDrawerState extends State<MyDrawer>
                 const SizedBox(width: 12),
                 Expanded(
                   child: MyText(
-                    title: "Get in Touch",
+                    title: AppLocalizations.of(context)!.genInTouch,
                     fontSize: isMobile ? 14 : 16,
                     fontWeight: FontWeight.bold,
                     color: MyColors.primaryColor,
@@ -461,7 +461,7 @@ class _MyDrawerState extends State<MyDrawer>
             _buildContactItem(
               icon: Icons.phone_rounded,
               text: "+1 (555) 123-4567",
-              label: "Call Us",
+              label: AppLocalizations.of(context)!.callus,
               isMobile: isMobile,
             ),
 
@@ -470,7 +470,7 @@ class _MyDrawerState extends State<MyDrawer>
             _buildContactItem(
               icon: Icons.email_rounded,
               text: "contact@healthcareplus.com",
-              label: "Email Us",
+              label: AppLocalizations.of(context)!.emailUs,
               isMobile: isMobile,
             ),
 
@@ -494,7 +494,7 @@ class _MyDrawerState extends State<MyDrawer>
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      "24/7 Emergency Care Available",
+                      "${AppLocalizations.of(context)!.twentyFourHours} ${AppLocalizations.of(context)!.emergencyCare}",
                       style: TextStyle(
                         fontSize: isMobile ? 10 : 12,
                         fontWeight: FontWeight.w600,

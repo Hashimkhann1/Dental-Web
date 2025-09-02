@@ -1,3 +1,4 @@
+import 'package:doctor_demo/l10n/app_localizations.dart';
 import 'package:doctor_demo/res/components/my_text.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
 import 'package:doctor_demo/res/responsive/responsive.dart';
@@ -154,7 +155,7 @@ class _ContactSectionViewState extends State<ContactSectionView>
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: MyColors.primaryColor,
               onPrimary: Colors.white,
               surface: Colors.white,
@@ -286,8 +287,8 @@ class _ContactSectionViewState extends State<ContactSectionView>
                     color: MyColors.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const MyText(
-                    title: "Contact Us",
+                  child: MyText(
+                    title: AppLocalizations.of(context)!.contactUs,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: MyColors.primaryColor,
@@ -295,7 +296,7 @@ class _ContactSectionViewState extends State<ContactSectionView>
                 ),
                 const SizedBox(height: 16),
                 MyText(
-                  title: "Let's Start a\nConversation",
+                  title: AppLocalizations.of(context)!.letsStartConversation,
                   fontSize: Responsive.isMobile(context) ? 36 : 48,
                   fontWeight: FontWeight.w800,
                   fontFamily: 'Oswald',
@@ -306,7 +307,7 @@ class _ContactSectionViewState extends State<ContactSectionView>
                 Container(
                   constraints: const BoxConstraints(maxWidth: 400),
                   child: Text(
-                    "We're here to help and answer any questions you might have. We look forward to hearing from you.",
+                    AppLocalizations.of(context)!.conversationDescription,
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -324,9 +325,9 @@ class _ContactSectionViewState extends State<ContactSectionView>
           // Contact details with staggered animations
           _buildAnimatedContactDetail(
             Icons.phone_rounded,
-            "What's App Us",
+            AppLocalizations.of(context)!.whatsAppUs,
             "+92 313 9217887",
-            "Available 24/7",
+            AppLocalizations.of(context)!.available247,
             _staggeredAnimation1,
             Colors.green,
             onTap: _handleWhatsAppTap,
@@ -336,9 +337,9 @@ class _ContactSectionViewState extends State<ContactSectionView>
 
           _buildAnimatedContactDetail(
             Icons.email_rounded,
-            "Email Us",
+            AppLocalizations.of(context)!.emailUs,
             "hmk182002@gmail.com",
-            "Quick response guaranteed",
+            AppLocalizations.of(context)!.quickResponseGuaranteed,
             _staggeredAnimation2,
             Colors.blue,
             onTap: _handleEmailTap,
@@ -348,7 +349,7 @@ class _ContactSectionViewState extends State<ContactSectionView>
 
           _buildAnimatedContactDetail(
             Icons.location_on_rounded,
-            "Visit Us",
+            AppLocalizations.of(context)!.visitUs,
             "123 Healthcare Street",
             "City, State 12345",
             _staggeredAnimation3,
@@ -366,7 +367,7 @@ class _ContactSectionViewState extends State<ContactSectionView>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Follow Us",
+                    AppLocalizations.of(context)!.followUs,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -563,14 +564,14 @@ class _ContactSectionViewState extends State<ContactSectionView>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Book Appointment",
+                        AppLocalizations.of(context)!.bookAppointment,
                         style: TextStyle(
                           fontSize: Responsive.isMobile(context) ? 20 : 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        "Schedule your visit with us",
+                        AppLocalizations.of(context)!.scheduleVisit,
                         style: TextStyle(
                           fontSize: Responsive.isMobile(context) ? 12 : 14,
                           color: Colors.grey.shade600,
@@ -598,8 +599,8 @@ class _ContactSectionViewState extends State<ContactSectionView>
 
               _buildEnhancedTextField(
                 controller: _messageController,
-                label: "Message",
-                hint: "Tell us about your symptoms or concerns...",
+                label: AppLocalizations.of(context)!.message,
+                hint: AppLocalizations.of(context)!.messagePlaceholder,
                 maxLines: 4,
                 icon: Icons.message_rounded,
               ),
@@ -633,8 +634,8 @@ class _ContactSectionViewState extends State<ContactSectionView>
         readOnly: true,
         onTap: () => _selectDate(context),
         decoration: InputDecoration(
-          labelText: "Appointment Date",
-          hintText: "Select your preferred date",
+          labelText: AppLocalizations.of(context)!.appointmentDate,
+          hintText: AppLocalizations.of(context)!.selectDate,
           prefixIcon: Icon(
             Icons.calendar_today_rounded,
             color: MyColors.primaryColor.withOpacity(0.7),
@@ -656,7 +657,7 @@ class _ContactSectionViewState extends State<ContactSectionView>
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: MyColors.primaryColor,
               width: 2,
             ),
@@ -670,7 +671,7 @@ class _ContactSectionViewState extends State<ContactSectionView>
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please select an appointment date';
+            return AppLocalizations.of(context)!.pleaseSelectDate;
           }
           return null;
         },
@@ -683,29 +684,29 @@ class _ContactSectionViewState extends State<ContactSectionView>
       children: [
         _buildEnhancedTextField(
           controller: _nameController,
-          label: "Full Name",
-          hint: "Enter your full name",
+          label: AppLocalizations.of(context)!.fullName,
+          hint: AppLocalizations.of(context)!.fullNamePlaceholder,
           icon: Icons.person_rounded,
         ),
         const SizedBox(height: 20),
         _buildEnhancedTextField(
           controller: _emailController,
-          label: "Email",
-          hint: "Enter your email address",
+          label: AppLocalizations.of(context)!.email,
+          hint: AppLocalizations.of(context)!.emailPlaceholder,
           icon: Icons.email_rounded,
         ),
         const SizedBox(height: 20),
         _buildEnhancedTextField(
           controller: _phoneController,
-          label: "Phone Number",
-          hint: "Enter your phone number",
+          label: AppLocalizations.of(context)!.phoneNumber,
+          hint: AppLocalizations.of(context)!.phoneNumberPlaceholder,
           icon: Icons.phone_rounded,
         ),
         const SizedBox(height: 20),
         _buildEnhancedTextField(
           controller: _addressController,
-          label: "Address",
-          hint: "Enter your address",
+          label: AppLocalizations.of(context)!.address,
+          hint: AppLocalizations.of(context)!.addressPlaceholder,
           icon: Icons.location_on_rounded,
         ),
       ],
@@ -720,8 +721,8 @@ class _ContactSectionViewState extends State<ContactSectionView>
             Expanded(
               child: _buildEnhancedTextField(
                 controller: _nameController,
-                label: "Full Name",
-                hint: "Enter your full name",
+                label: AppLocalizations.of(context)!.fullName,
+                hint: AppLocalizations.of(context)!.fullNamePlaceholder,
                 icon: Icons.person_rounded,
               ),
             ),
@@ -729,8 +730,8 @@ class _ContactSectionViewState extends State<ContactSectionView>
             Expanded(
               child: _buildEnhancedTextField(
                 controller: _emailController,
-                label: "Email",
-                hint: "Enter your email address",
+                label: AppLocalizations.of(context)!.email,
+                hint: AppLocalizations.of(context)!.emailPlaceholder,
                 icon: Icons.email_rounded,
               ),
             ),
@@ -742,8 +743,8 @@ class _ContactSectionViewState extends State<ContactSectionView>
             Expanded(
               child: _buildEnhancedTextField(
                 controller: _phoneController,
-                label: "Phone Number",
-                hint: "Enter your phone number",
+                label: AppLocalizations.of(context)!.phoneNumber,
+                hint: AppLocalizations.of(context)!.phoneNumberPlaceholder,
                 icon: Icons.phone_rounded,
               ),
             ),
@@ -751,8 +752,8 @@ class _ContactSectionViewState extends State<ContactSectionView>
             Expanded(
               child: _buildEnhancedTextField(
                 controller: _addressController,
-                label: "Address",
-                hint: "Enter your address",
+                label: AppLocalizations.of(context)!.address,
+                hint: AppLocalizations.of(context)!.addressPlaceholder,
                 icon: Icons.location_on_rounded,
               ),
             ),
@@ -803,7 +804,7 @@ class _ContactSectionViewState extends State<ContactSectionView>
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: MyColors.primaryColor,
               width: 2,
             ),
@@ -817,7 +818,7 @@ class _ContactSectionViewState extends State<ContactSectionView>
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'This field is required';
+            return AppLocalizations.of(context)!.requiredField;
           }
           return null;
         },
@@ -856,10 +857,10 @@ class _ContactSectionViewState extends State<ContactSectionView>
               child: Container(
                 alignment: Alignment.center,
                 child: isSubmitting
-                    ? const Row(
+                    ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(
@@ -867,10 +868,10 @@ class _ContactSectionViewState extends State<ContactSectionView>
                         valueColor: AlwaysStoppedAnimation(Colors.white),
                       ),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Text(
-                      "Submitting...",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.submitting,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -878,18 +879,18 @@ class _ContactSectionViewState extends State<ContactSectionView>
                     ),
                   ],
                 )
-                    : const Row(
+                    : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.send_rounded,
                       color: Colors.white,
                       size: 20,
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
-                      "Book Appointment",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.bookAppointment,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

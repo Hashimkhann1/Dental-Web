@@ -30,6 +30,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get careAndSmile => 'Care & Smile';
 
   @override
+  String get menu => 'Menu';
+
+  @override
   String get bookAppointment => 'Book Appointment';
 
   @override
@@ -168,7 +171,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Meet our team of experienced healthcare professionals dedicated to providing exceptional medical care with compassion and expertise.';
 
   @override
-  String get letsStartConversation => 'Let\'s Start a Conversation';
+  String get tapForDetails => 'Tap for details';
+
+  @override
+  String get letsStartConversation => 'Let\'s Start a\n Conversation';
 
   @override
   String get conversationDescription =>
@@ -185,6 +191,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get followUs => 'Follow Us';
+
+  @override
+  String get available247 => 'Available 24/7';
+
+  @override
+  String get quickResponseGuaranteed => 'Quick response guaranteed';
 
   @override
   String get scheduleVisit => 'Schedule your visit with us';
@@ -233,4 +245,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get submitting => 'Submitting...';
+
+  @override
+  String get quickLinks => 'Quick Links';
+
+  @override
+  String get clinicHours => 'Clinic Hours';
+
+  @override
+  String get healthPriority => 'Your Health, Our Priority';
+
+  @override
+  String get exceptionalHealthcare =>
+      'Providing exceptional healthcare services with compassion, expertise, and cutting-edge medical technology. Your wellness is our commitment.';
+
+  @override
+  String get stayConnected =>
+      'Stay connected with us on social media for health tips, updates, and community support.';
+
+  @override
+  String get closed => 'Closed';
+
+  @override
+  String get mondayFriday => 'Monday - Friday';
+
+  @override
+  String get saturday => 'Saturday';
+
+  @override
+  String get sunday => 'Sunday';
+
+  @override
+  String get emergency => 'Emergency';
+
+  @override
+  String get genInTouch => 'Get in Touch';
+
+  @override
+  String get callus => 'Call Us';
 }

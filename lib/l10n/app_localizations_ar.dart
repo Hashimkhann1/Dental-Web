@@ -30,6 +30,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get careAndSmile => 'العناية والابتسامة';
 
   @override
+  String get menu => 'قائمة طعام';
+
+  @override
   String get bookAppointment => 'حجز موعد';
 
   @override
@@ -167,6 +170,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'تعرف على فريقنا من المتخصصين ذوي الخبرة في الرعاية الصحية المكرسين لتقديم رعاية طبية استثنائية بكل رحمة وخبرة.';
 
   @override
+  String get tapForDetails => 'اضغط لمزيد من التفاصيل';
+
+  @override
   String get letsStartConversation => 'لنبدأ محادثة';
 
   @override
@@ -184,6 +190,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get followUs => 'تابعنا';
+
+  @override
+  String get available247 => 'متاح 24/7';
+
+  @override
+  String get quickResponseGuaranteed => 'استجابة سريعة مضمونة';
 
   @override
   String get scheduleVisit => 'حدد موعد زيارتك معنا';
@@ -232,4 +244,42 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get submitting => 'جارٍ الإرسال...';
+
+  @override
+  String get quickLinks => 'روابط سريعة';
+
+  @override
+  String get clinicHours => 'ساعات العيادة';
+
+  @override
+  String get healthPriority => 'صحتك أولويتنا';
+
+  @override
+  String get exceptionalHealthcare =>
+      'نقدم خدمات رعاية صحية استثنائية بعاطفة وخبرة وباستخدام أحدث التقنيات الطبية. رفاهيتك هي التزامنا.';
+
+  @override
+  String get stayConnected =>
+      'ابقَ على تواصل معنا عبر وسائل التواصل الاجتماعي للحصول على نصائح صحية وتحديثات ودعم مجتمعي.';
+
+  @override
+  String get closed => 'مغلق';
+
+  @override
+  String get mondayFriday => 'الاثنين - الجمعة';
+
+  @override
+  String get saturday => 'السبت';
+
+  @override
+  String get sunday => 'الأحد';
+
+  @override
+  String get emergency => 'طوارئ';
+
+  @override
+  String get genInTouch => 'تواصل معنا';
+
+  @override
+  String get callus => 'اتصل بنا';
 }

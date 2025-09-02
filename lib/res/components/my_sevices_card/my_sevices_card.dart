@@ -1,5 +1,5 @@
+import 'package:doctor_demo/l10n/app_localizations.dart';
 import 'package:doctor_demo/res/components/my_text.dart';
-import 'package:doctor_demo/res/my_colors/my_colors.dart';
 import 'package:doctor_demo/res/responsive/responsive.dart';
 import 'package:flutter/material.dart';
 
@@ -451,7 +451,7 @@ class _MyServicesCardState extends State<MyServicesCard>
                       ),
                       const SizedBox(width: 8),
                       MyText(
-                        title: "Learn More",
+                        title: AppLocalizations.of(context)!.learnMore,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: Colors.grey.shade700,

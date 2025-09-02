@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'Care & Smile'**
   String get careAndSmile;
 
+  /// No description provided for @menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menu;
+
   /// No description provided for @bookAppointment.
   ///
   /// In en, this message translates to:
@@ -392,10 +398,16 @@ abstract class AppLocalizations {
   /// **'Meet our team of experienced healthcare professionals dedicated to providing exceptional medical care with compassion and expertise.'**
   String get meetOurTeam;
 
+  /// No description provided for @tapForDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap for details'**
+  String get tapForDetails;
+
   /// No description provided for @letsStartConversation.
   ///
   /// In en, this message translates to:
-  /// **'Let\'s Start a Conversation'**
+  /// **'Let\'s Start a\n Conversation'**
   String get letsStartConversation;
 
   /// No description provided for @conversationDescription.
@@ -427,6 +439,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Follow Us'**
   String get followUs;
+
+  /// No description provided for @available247.
+  ///
+  /// In en, this message translates to:
+  /// **'Available 24/7'**
+  String get available247;
+
+  /// No description provided for @quickResponseGuaranteed.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick response guaranteed'**
+  String get quickResponseGuaranteed;
 
   /// No description provided for @scheduleVisit.
   ///
@@ -523,6 +547,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Submitting...'**
   String get submitting;
+
+  /// No description provided for @quickLinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Links'**
+  String get quickLinks;
+
+  /// No description provided for @clinicHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Clinic Hours'**
+  String get clinicHours;
+
+  /// No description provided for @healthPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Health, Our Priority'**
+  String get healthPriority;
+
+  /// No description provided for @exceptionalHealthcare.
+  ///
+  /// In en, this message translates to:
+  /// **'Providing exceptional healthcare services with compassion, expertise, and cutting-edge medical technology. Your wellness is our commitment.'**
+  String get exceptionalHealthcare;
+
+  /// No description provided for @stayConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay connected with us on social media for health tips, updates, and community support.'**
+  String get stayConnected;
+
+  /// No description provided for @closed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get closed;
+
+  /// No description provided for @mondayFriday.
+  ///
+  /// In en, this message translates to:
+  /// **'Monday - Friday'**
+  String get mondayFriday;
+
+  /// No description provided for @saturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get saturday;
+
+  /// No description provided for @sunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get sunday;
+
+  /// No description provided for @emergency.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency'**
+  String get emergency;
+
+  /// No description provided for @genInTouch.
+  ///
+  /// In en, this message translates to:
+  /// **'Get in Touch'**
+  String get genInTouch;
+
+  /// No description provided for @callus.
+  ///
+  /// In en, this message translates to:
+  /// **'Call Us'**
+  String get callus;
 }
 
 class _AppLocalizationsDelegate

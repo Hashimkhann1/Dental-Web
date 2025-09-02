@@ -1,5 +1,5 @@
+import 'package:doctor_demo/l10n/app_localizations.dart';
 import 'package:doctor_demo/res/components/my_text.dart';
-import 'package:doctor_demo/res/my_colors/my_colors.dart';
 import 'package:doctor_demo/res/responsive/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -178,7 +178,7 @@ class _FooterSectionViewState extends State<FooterSectionView>
         const SizedBox(height: 40),
         _buildClinicHoursSection(),
         const SizedBox(height: 30),
-        _buildNewsletterSection(),
+        _buildSocialMediaSection(), // Social media moved here
       ],
     );
   }
@@ -193,7 +193,7 @@ class _FooterSectionViewState extends State<FooterSectionView>
         const SizedBox(width: 60),
         Expanded(flex: 1, child: _buildClinicHoursSection()),
         const SizedBox(width: 60),
-        Expanded(flex: 2, child: _buildNewsletterSection()),
+        Expanded(flex: 2, child: _buildSocialMediaSection()), // Social media moved here
       ],
     );
   }
@@ -208,9 +208,7 @@ class _FooterSectionViewState extends State<FooterSectionView>
         children: [
           // Logo and clinic name
           Row(
-            mainAxisAlignment: Responsive.isMobile(context)
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
@@ -254,7 +252,7 @@ class _FooterSectionViewState extends State<FooterSectionView>
                     fontFamily: 'Oswald',
                   ),
                   Text(
-                    "Your Health, Our Priority",
+                    AppLocalizations.of(context)!.healthPriority,
                     style: TextStyle(
                       color: Colors.grey.shade400,
                       fontSize: 14,
@@ -272,7 +270,7 @@ class _FooterSectionViewState extends State<FooterSectionView>
           Container(
             constraints: const BoxConstraints(maxWidth: 350),
             child: Text(
-              "Providing exceptional healthcare services with compassion, expertise, and cutting-edge medical technology. Your wellness is our commitment.",
+              AppLocalizations.of(context)!.exceptionalHealthcare,
               style: TextStyle(
                 color: Colors.grey.shade300,
                 fontSize: 16,
@@ -280,15 +278,10 @@ class _FooterSectionViewState extends State<FooterSectionView>
                 letterSpacing: 0.3,
               ),
               textAlign: Responsive.isMobile(context)
-                  ? TextAlign.center
+                  ? TextAlign.left
                   : TextAlign.left,
             ),
           ),
-
-          const SizedBox(height: 30),
-
-          // Social media icons
-          _buildSocialMediaIcons(),
 
           const SizedBox(height: 24),
 
@@ -296,6 +289,37 @@ class _FooterSectionViewState extends State<FooterSectionView>
           _buildContactInfo(),
         ],
       ),
+    );
+  }
+
+  // New separate social media section
+  Widget _buildSocialMediaSection() {
+    return Column(
+      crossAxisAlignment: Responsive.isMobile(context)
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.start,
+      children: [
+        MyText(
+          title: AppLocalizations.of(context)!.followUs,
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+        const SizedBox(height: 16),
+        Text(
+          AppLocalizations.of(context)!.stayConnected,
+          style: TextStyle(
+            color: Colors.grey.shade300,
+            fontSize: 14,
+            height: 1.5,
+          ),
+          textAlign: Responsive.isMobile(context)
+              ? TextAlign.start
+              : TextAlign.left,
+        ),
+        const SizedBox(height: 24),
+        _buildSocialMediaIcons(),
+      ],
     );
   }
 
@@ -398,7 +422,7 @@ class _FooterSectionViewState extends State<FooterSectionView>
           margin: const EdgeInsets.only(bottom: 12),
           child: Row(
             mainAxisAlignment: Responsive.isMobile(context)
-                ? MainAxisAlignment.center
+                ? MainAxisAlignment.start
                 : MainAxisAlignment.start,
             children: [
               Container(
@@ -429,99 +453,166 @@ class _FooterSectionViewState extends State<FooterSectionView>
   }
 
   Widget _buildQuickLinksSection() {
-    final quickLinks = ['Home', 'About Us', 'Services', 'Doctors', 'Contact Us', 'Appointments'];
+    final quickLinks = [AppLocalizations.of(context)!.home, AppLocalizations.of(context)!.aboutUs, AppLocalizations.of(context)!.services, AppLocalizations.of(context)!.contactUs, AppLocalizations.of(context)!.bookAppointment];
+    final isMobile = Responsive.isMobile(context);
 
     return Transform.translate(
       offset: Offset(0, _quickLinksSlideAnimation.value),
       child: Column(
-        crossAxisAlignment: Responsive.isMobile(context)
-            ? CrossAxisAlignment.center
-            : CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             margin: const EdgeInsets.only(bottom: 24),
-            child: const MyText(
-              title: "Quick Links",
+            child: MyText(
+              title: AppLocalizations.of(context)!.quickLinks,
               fontSize: 22,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-          ...quickLinks.asMap().entries.map((entry) {
-            final index = entry.key;
-            final link = entry.value;
-
-            return TweenAnimationBuilder<double>(
-              duration: Duration(milliseconds: 600 + (index * 100)),
-              tween: Tween(begin: 0.0, end: 1.0),
-              builder: (context, value, child) {
-                return Transform.translate(
-                  offset: Offset(0, (1 - value) * 20),
-                  child: Opacity(
-                    opacity: value,
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(8),
-                          onTap: () {
-                            // Handle navigation
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 12,
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.blue.shade400,
-                                  size: 12,
-                                ),
-                                const SizedBox(width: 8),
-                                MyText(
-                                  title: link,
-                                  fontSize: 16,
-                                  color: Colors.grey.shade300,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          }).toList(),
+          isMobile ? _buildMobileQuickLinks(quickLinks) : _buildDesktopQuickLinks(quickLinks),
         ],
       ),
     );
   }
 
+  Widget _buildMobileQuickLinks(List<String> quickLinks) {
+    return Wrap(
+      alignment: WrapAlignment.start,
+      spacing: 8,
+      runSpacing: 8,
+      children: quickLinks.asMap().entries.map((entry) {
+        final index = entry.key;
+        final link = entry.value;
+
+        return TweenAnimationBuilder<double>(
+          duration: Duration(milliseconds: 600 + (index * 100)),
+          tween: Tween(begin: 0.0, end: 1.0),
+          builder: (context, value, child) {
+            return Transform.translate(
+              offset: Offset(0, (1 - value) * 20),
+              child: Opacity(
+                opacity: value,
+                child: Container(
+                  width: (MediaQuery.of(context).size.width - 60) / 2 - 4, // Two per row with spacing
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () {
+                        // Handle navigation
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 8,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.blue.shade400,
+                              size: 12,
+                            ),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: MyText(
+                                title: link,
+                                fontSize: 16,
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildDesktopQuickLinks(List<String> quickLinks) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: quickLinks.asMap().entries.map((entry) {
+        final index = entry.key;
+        final link = entry.value;
+
+        return TweenAnimationBuilder<double>(
+          duration: Duration(milliseconds: 600 + (index * 100)),
+          tween: Tween(begin: 0.0, end: 1.0),
+          builder: (context, value, child) {
+            return Transform.translate(
+              offset: Offset(0, (1 - value) * 20),
+              child: Opacity(
+                opacity: value,
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () {
+                        // Handle navigation
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 12,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.blue.shade400,
+                              size: 12,
+                            ),
+                            const SizedBox(width: 8),
+                            MyText(
+                              title: link,
+                              fontSize: 16,
+                              color: Colors.grey.shade300,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      }).toList(),
+    );
+  }
+
   Widget _buildClinicHoursSection() {
     final scheduleItems = [
-      {'days': 'Monday - Friday', 'hours': '9:00 AM - 7:00 PM', 'status': 'open'},
-      {'days': 'Saturday', 'hours': '9:00 AM - 5:00 PM', 'status': 'open'},
-      {'days': 'Sunday', 'hours': 'Closed', 'status': 'closed'},
-      {'days': 'Emergency', 'hours': '24/7 Available', 'status': 'emergency'},
+      {'days': AppLocalizations.of(context)!.mondayFriday, 'hours': '9:00 AM - 7:00 PM', 'status': 'open'},
+      {'days': AppLocalizations.of(context)!.saturday, 'hours': '9:00 AM - 5:00 PM', 'status': 'open'},
+      {'days': AppLocalizations.of(context)!.sunday, 'hours': AppLocalizations.of(context)!.closed, 'status': 'closed'},
+      {'days': AppLocalizations.of(context)!.emergency, 'hours': AppLocalizations.of(context)!.available247, 'status': 'emergency'},
     ];
 
     return Transform.translate(
       offset: Offset(0, _hoursSlideAnimation.value),
       child: Column(
         crossAxisAlignment: Responsive.isMobile(context)
-            ? CrossAxisAlignment.center
+            ? CrossAxisAlignment.start
             : CrossAxisAlignment.start,
         children: [
           Container(
             margin: const EdgeInsets.only(bottom: 24),
-            child: const MyText(
-              title: "Clinic Hours",
+            child: MyText(
+              title: AppLocalizations.of(context)!.clinicHours,
               fontSize: 22,
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -593,87 +684,6 @@ class _FooterSectionViewState extends State<FooterSectionView>
     );
   }
 
-  Widget _buildNewsletterSection() {
-    return Column(
-      crossAxisAlignment: Responsive.isMobile(context)
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
-      children: [
-        const MyText(
-          title: "Stay Updated",
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-        const SizedBox(height: 16),
-        Text(
-          "Subscribe to our newsletter for health tips and clinic updates.",
-          style: TextStyle(
-            color: Colors.grey.shade300,
-            fontSize: 14,
-            height: 1.5,
-          ),
-          textAlign: Responsive.isMobile(context)
-              ? TextAlign.center
-              : TextAlign.left,
-        ),
-        const SizedBox(height: 20),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.2),
-            ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Enter your email",
-                    hintStyle: TextStyle(color: Colors.grey.shade400),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    prefixIcon: Icon(
-                      Icons.email_outlined,
-                      color: Colors.grey.shade400,
-                    ),
-                  ),
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(4),
-                child: Material(
-                  color: Colors.blue.shade600,
-                  borderRadius: BorderRadius.circular(8),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(8),
-                    onTap: () {
-                      // Handle newsletter subscription
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      child: const Icon(
-                        Icons.send_rounded,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildBottomBar(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
@@ -723,10 +733,10 @@ class _FooterSectionViewState extends State<FooterSectionView>
           Row(
             children: [
               _buildFooterLink("Privacy Policy"),
-              Text(" • ", style: TextStyle(color: Colors.grey.shade600)),
-              _buildFooterLink("Terms of Service"),
-              Text(" • ", style: TextStyle(color: Colors.grey.shade600)),
-              _buildFooterLink("Cookie Policy"),
+              // Text(" • ", style: TextStyle(color: Colors.grey.shade600)),
+              // _buildFooterLink("Terms of Service"),
+              // Text(" • ", style: TextStyle(color: Colors.grey.shade600)),
+              // _buildFooterLink("Cookie Policy"),
             ],
           ),
         ],

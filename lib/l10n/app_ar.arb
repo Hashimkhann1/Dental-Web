@@ -7,6 +7,7 @@
   "ourExperts": "خبراؤنا",
   "bookNow": "احجز الآن",
   "careAndSmile": "العناية والابتسامة",
+  "menu" : "قائمة طعام",
   "bookAppointment": "حجز موعد",
   "welcomeToOurClinic": "مرحبًا بكم في عيادتنا",
   "homeTitle": "ابتسامتك هي\nأولويتنا",
@@ -53,6 +54,7 @@
 
   "ourExpertDoctors": "أطباؤنا الخبراء",
   "meetOurTeam": "تعرف على فريقنا من المتخصصين ذوي الخبرة في الرعاية الصحية المكرسين لتقديم رعاية طبية استثنائية بكل رحمة وخبرة.",
+  "tapForDetails": "اضغط لمزيد من التفاصيل",
 
   "letsStartConversation": "لنبدأ محادثة",
   "conversationDescription": "نحن هنا لمساعدتك والإجابة على أي أسئلة قد تكون لديك. نتطلع إلى سماعك.",
@@ -60,6 +62,8 @@
   "emailUs": "أرسل لنا بريدًا إلكترونيًا",
   "visitUs": "قم بزيارتنا",
   "followUs": "تابعنا",
+  "available247": "متاح 24/7",
+  "quickResponseGuaranteed": "استجابة سريعة مضمونة",
   "scheduleVisit": "حدد موعد زيارتك معنا",
   "message": "رسالة",
   "messagePlaceholder": "أخبرنا عن الأعراض أو المخاوف التي لديك...",
@@ -75,6 +79,19 @@
   "address": "العنوان",
   "addressPlaceholder": "أدخل عنوانك",
   "requiredField": "هذا الحقل مطلوب",
-  "submitting": "جارٍ الإرسال..."
+  "submitting": "جارٍ الإرسال...",
+
+  "quickLinks": "روابط سريعة",
+  "clinicHours": "ساعات العيادة",
+  "healthPriority": "صحتك أولويتنا",
+  "exceptionalHealthcare": "نقدم خدمات رعاية صحية استثنائية بعاطفة وخبرة وباستخدام أحدث التقنيات الطبية. رفاهيتك هي التزامنا.",
+  "stayConnected": "ابقَ على تواصل معنا عبر وسائل التواصل الاجتماعي للحصول على نصائح صحية وتحديثات ودعم مجتمعي.",
+  "closed": "مغلق",
+  "mondayFriday": "الاثنين - الجمعة",
+  "saturday": "السبت",
+  "sunday": "الأحد",
+  "emergency": "طوارئ",
+  "genInTouch" : "تواصل معنا",
+  "callus" : "اتصل بنا"
 
 }

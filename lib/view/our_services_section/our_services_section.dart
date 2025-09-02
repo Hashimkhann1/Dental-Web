@@ -33,6 +33,46 @@ class _OurServicesSectionState extends State<OurServicesSection>
   // Add this flag to prevent multiple triggers
   bool _hasTriggeredAnimation = false;
 
+  // Move servicesData to a getter instead of a field initializer
+  List<Map<String, dynamic>> get servicesData => [
+    {
+      "title": AppLocalizations.of(context)!.rootCanalTitle,
+      "description": AppLocalizations.of(context)!.rootCanalDescription,
+      "icon": Icons.healing,
+      "color": Colors.blue,
+    },
+    {
+      "title": AppLocalizations.of(context)!.dentalImplantsTitle,
+      "description": AppLocalizations.of(context)!.dentalImplantsDescription,
+      "icon": Icons.construction,
+      "color": Colors.green,
+    },
+    {
+      "title": AppLocalizations.of(context)!.paediatricDentistryTitle,
+      "description": AppLocalizations.of(context)!.paediatricDentistryDescription,
+      "icon": Icons.child_care,
+      "color": Colors.orange,
+    },
+    {
+      "title": AppLocalizations.of(context)!.orthodonticTreatmentTitle,
+      "description": AppLocalizations.of(context)!.orthodonticTreatmentDescription,
+      "icon": Icons.straighten,
+      "color": Colors.purple,
+    },
+    {
+      "title": AppLocalizations.of(context)!.restorativeDentistryTitle,
+      "description": AppLocalizations.of(context)!.restorativeDentistryDescription,
+      "icon": Icons.build_circle,
+      "color": Colors.teal,
+    },
+    {
+      "title": AppLocalizations.of(context)!.cosmeticDentistryTitle,
+      "description": AppLocalizations.of(context)!.cosmeticDentistryDescription,
+      "icon": Icons.auto_awesome,
+      "color": Colors.pink,
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -52,35 +92,10 @@ class _OurServicesSectionState extends State<OurServicesSection>
       duration: const Duration(milliseconds: 2000),
     );
 
-    // Initialize individual card controllers
-    for (int i = 0; i < servicesData.length; i++) {
-      final cardController = AnimationController(
-        vsync: this,
-        duration: Duration(milliseconds: 1500 + (i * 200)),
-      );
-      _cardControllers.add(cardController);
-
-      _cardAnimations.add(
-        Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: cardController,
-            curve: Curves.elasticOut,
-          ),
-        ),
-      );
-
-      _cardSlideAnimations.add(
-        Tween<Offset>(
-          begin: const Offset(0, 0.3),
-          end: Offset.zero,
-        ).animate(
-          CurvedAnimation(
-            parent: cardController,
-            curve: Curves.easeOutBack,
-          ),
-        ),
-      );
-    }
+    // Add post-frame callback to initialize card controllers after build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeCardControllers();
+    });
 
     _titleSlideAnimation = Tween<Offset>(
       begin: const Offset(0, -0.5),
@@ -127,6 +142,38 @@ class _OurServicesSectionState extends State<OurServicesSection>
     });
   }
 
+  void _initializeCardControllers() {
+    // Initialize individual card controllers
+    for (int i = 0; i < servicesData.length; i++) {
+      final cardController = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 1500 + (i * 200)),
+      );
+      _cardControllers.add(cardController);
+
+      _cardAnimations.add(
+        Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: cardController,
+            curve: Curves.elasticOut,
+          ),
+        ),
+      );
+
+      _cardSlideAnimations.add(
+        Tween<Offset>(
+          begin: const Offset(0, 0.3),
+          end: Offset.zero,
+        ).animate(
+          CurvedAnimation(
+            parent: cardController,
+            curve: Curves.easeOutBack,
+          ),
+        ),
+      );
+    }
+  }
+
   void _checkAndStartAnimations() {
     // Force start animations if user scrolled to this section already
     final scrollOffset = context.read<DisplayOffset>().state.scrollOffsetValue;
@@ -142,45 +189,6 @@ class _OurServicesSectionState extends State<OurServicesSection>
       }
     }
   }
-
-  List<Map<String, dynamic>> servicesData = [
-    {
-      "title": "Root Canal (painless)",
-      "description": "Advanced painless root canal treatment using modern techniques and sedation options.",
-      "icon": Icons.healing,
-      "color": Colors.blue,
-    },
-    {
-      "title": "Dental Implants",
-      "description": "Permanent tooth replacement solutions with titanium implants for natural-looking results.",
-      "icon": Icons.construction,
-      "color": Colors.green,
-    },
-    {
-      "title": "Paediatric Dentistry",
-      "description": "Specialized dental care for children in a fun, comfortable, and child-friendly environment.",
-      "icon": Icons.child_care,
-      "color": Colors.orange,
-    },
-    {
-      "title": "Orthodontic Treatment",
-      "description": "Comprehensive orthodontic solutions including braces and clear aligners for perfect smiles.",
-      "icon": Icons.straighten,
-      "color": Colors.purple,
-    },
-    {
-      "title": "Restorative Dentistry",
-      "description": "Complete restoration services including fillings, crowns, and bridges using premium materials.",
-      "icon": Icons.build_circle,
-      "color": Colors.teal,
-    },
-    {
-      "title": "Cosmetic Dentistry",
-      "description": "Transform your smile with veneers, whitening, and cosmetic procedures for enhanced beauty.",
-      "icon": Icons.auto_awesome,
-      "color": Colors.pink,
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -440,7 +448,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                     Positioned(
                       top: 200 + (15 * _backgroundAnimation.value),
                       left: 100,
-                      child: Opacity(
+                      child: const Opacity(
                         opacity: 0.1,
                         child: Icon(
                           Icons.local_hospital,
@@ -452,7 +460,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                     Positioned(
                       bottom: 100 + (25 * _backgroundAnimation.value),
                       right: 150,
-                      child: Opacity(
+                      child: const Opacity(
                         opacity: 0.08,
                         child: Icon(
                           Icons.medical_services,
@@ -553,7 +561,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.calendar_today,
                           size: 16,
                           color: MyColors.primaryColor,
@@ -592,7 +600,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.phone,
                           size: 16,
                           color: Colors.white,
@@ -631,7 +639,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.calendar_today,
                         size: 18,
                         color: MyColors.primaryColor,
@@ -667,7 +675,7 @@ class _OurServicesSectionState extends State<OurServicesSection>
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.phone,
                         size: 18,
                         color: Colors.white,

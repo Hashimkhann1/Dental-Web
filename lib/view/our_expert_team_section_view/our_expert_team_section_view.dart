@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:doctor_demo/l10n/app_localizations.dart';
 import 'package:doctor_demo/res/components/expert_doctor_card/expert_doctor_card.dart';
 import 'package:doctor_demo/res/components/my_text.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
@@ -198,7 +199,7 @@ class _OurExpertTeamSectionViewState extends State<OurExpertTeamSectionView>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: MyText(
-                title: "Our Expert Doctors",
+                title: AppLocalizations.of(context)!.ourExpertDoctors,
                 fontSize: _getResponsiveTitleSize(),
                 fontWeight: FontWeight.bold,
                 color: MyColors.primaryColor,
@@ -220,7 +221,7 @@ class _OurExpertTeamSectionViewState extends State<OurExpertTeamSectionView>
               constraints: const BoxConstraints(maxWidth: 600),
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                "Meet our team of experienced healthcare professionals dedicated to providing exceptional medical care with compassion and expertise.",
+                AppLocalizations.of(context)!.meetOurTeam,
                 style: TextStyle(
                   fontSize: _getResponsiveSubtitleSize(),
                   color: Colors.grey[600],

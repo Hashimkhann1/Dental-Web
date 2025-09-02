@@ -1,11 +1,16 @@
 import 'package:doctor_demo/l10n/app_localizations.dart';
 import 'package:doctor_demo/res/components/my_text.dart';
-import 'package:doctor_demo/res/components/my_text_button.dart';
 import 'package:doctor_demo/res/my_colors/my_colors.dart';
 import 'package:doctor_demo/res/responsive/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HeaderSectionView extends StatefulWidget {
+final languageProvider = StateProvider<Locale>((ref) {
+  return Locale('ar');
+});
+
+
+class HeaderSectionView extends ConsumerStatefulWidget {
   const HeaderSectionView({
     super.key,
     this.homeOnTap,
@@ -14,6 +19,7 @@ class HeaderSectionView extends StatefulWidget {
     required this.ourExpertOnTap,
     required this.drawertOnTap,
     required this.bookNowOnTap,
+    this.onLanguageChanged,
   });
 
   final void Function()? homeOnTap;
@@ -22,12 +28,13 @@ class HeaderSectionView extends StatefulWidget {
   final void Function()? ourExpertOnTap;
   final void Function()? drawertOnTap;
   final void Function()? bookNowOnTap;
+  final void Function(String language)? onLanguageChanged;
 
   @override
-  State<HeaderSectionView> createState() => _HeaderSectionViewState();
+  ConsumerState<HeaderSectionView> createState() => _HeaderSectionViewState();
 }
 
-class _HeaderSectionViewState extends State<HeaderSectionView>
+class _HeaderSectionViewState extends ConsumerState<HeaderSectionView>
     with TickerProviderStateMixin {
   late AnimationController _headerController;
   late Animation<double> _headerFadeAnimation;
@@ -35,6 +42,8 @@ class _HeaderSectionViewState extends State<HeaderSectionView>
   late Animation<Offset> _menuSlideAnimation;
 
   int _hoveredIndex = -1;
+  bool _isLanguageDropdownOpen = false;
+  String _selectedLanguage = 'Arabic'; // Initialize based on default locale
 
   @override
   void initState() {
@@ -82,6 +91,12 @@ class _HeaderSectionViewState extends State<HeaderSectionView>
 
   @override
   Widget build(BuildContext context) {
+    // Watch the current locale from the provider
+    final currentLocale = ref.watch(languageProvider);
+
+    // Update _selectedLanguage based on current locale
+    _selectedLanguage = currentLocale.languageCode == 'en' ? 'English' : 'Arabic';
+
     return FadeTransition(
       opacity: _headerFadeAnimation,
       child: Container(
@@ -158,25 +173,31 @@ class _HeaderSectionViewState extends State<HeaderSectionView>
                 ),
               ],
             ),
-            // Menu button
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: widget.drawertOnTap,
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
+            // Menu button and language
+            Row(
+              children: [
+                _buildLanguageDropdown(),
+                const SizedBox(width: 8),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: widget.drawertOnTap,
                     borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.menu,
-                    size: 28,
-                    color: MyColors.whiteColor,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.menu,
+                        size: 28,
+                        color: MyColors.whiteColor,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
@@ -262,13 +283,155 @@ class _HeaderSectionViewState extends State<HeaderSectionView>
                 const SizedBox(width: 32),
                 _buildNavItem(AppLocalizations.of(context)!.ourExperts, 3, widget.ourExpertOnTap),
                 const SizedBox(width: 30),
-                // _buildNavItem("Contact us", 4, widget.bookNowOnTap),
                 _buildAppointmentButton(widget.bookNowOnTap),
+                const SizedBox(width: 20),
+                _buildLanguageDropdown(),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildLanguageDropdown() {
+    return PopupMenuButton<String>(
+      onSelected: (String language) {
+        // Update the Riverpod provider with the new locale
+        ref.read(languageProvider.notifier).state =
+        language == 'English' ? const Locale('en') : const Locale('ar');
+
+        // Call the callback if provided
+        if (widget.onLanguageChanged != null) {
+          widget.onLanguageChanged!(language == 'English' ? 'en' : 'ar');
+        }
+      },
+      offset: const Offset(0, 50),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      color: Colors.white,
+      elevation: 8,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Colors.white.withOpacity(0.2),
+            width: 1,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.translate,
+              color: Colors.white,
+              size: 20,
+            ),
+            if (!Responsive.isMobile(context)) ...[
+              const SizedBox(width: 6),
+              MyText(
+                title: _selectedLanguage == 'English' ? 'EN' : 'AR',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 4),
+              const Icon(
+                Icons.keyboard_arrow_down,
+                color: Colors.white,
+                size: 16,
+              ),
+            ],
+          ],
+        ),
+      ),
+      itemBuilder: (BuildContext context) => [
+        PopupMenuItem<String>(
+          value: 'English',
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            child: Row(
+              children: [
+                Container(
+                  width: 24,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: Colors.blue.shade100,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '🇺🇸',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                MyText(
+                  title: 'English',
+                  fontSize: 16,
+                  color: MyColors.primaryColor,
+                  fontWeight: _selectedLanguage == 'English'
+                      ? FontWeight.w600
+                      : FontWeight.w400,
+                ),
+                if (_selectedLanguage == 'English') ...[
+                  const Spacer(),
+                  Icon(
+                    Icons.check,
+                    color: MyColors.primaryColor,
+                    size: 18,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'Arabic',
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            child: Row(
+              children: [
+                Container(
+                  width: 24,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: Colors.green.shade100,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '🇸🇦',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                MyText(
+                  title: 'العربية',
+                  fontSize: 16,
+                  color: MyColors.primaryColor,
+                  fontWeight: _selectedLanguage == 'Arabic'
+                      ? FontWeight.w600
+                      : FontWeight.w400,
+                ),
+                if (_selectedLanguage == 'Arabic') ...[
+                  const Spacer(),
+                  Icon(
+                    Icons.check,
+                    color: MyColors.primaryColor,
+                    size: 18,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
